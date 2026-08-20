@@ -54,15 +54,15 @@ export function MadeFreshSection({ locale, content }: MadeFreshSectionProps) {
               </a>
             </div>
 
-            <div className="grid grid-cols-[1.4fr_0.7fr] gap-3">
-              <VideoThumb
-                video={featured}
-                locale={locale}
-                content={content}
-                onPlay={setActiveVideo}
-                featured
-              />
-              <div className="grid gap-3">
+            <div className="mx-auto w-full max-w-md lg:max-w-none">
+              <div className="grid grid-cols-2 grid-rows-2 gap-2 sm:gap-3 md:grid-cols-[2fr_1fr] md:grid-rows-3 md:items-stretch">
+                <VideoThumb
+                  video={featured}
+                  locale={locale}
+                  content={content}
+                  onPlay={setActiveVideo}
+                  featured
+                />
                 {sideVideos.map((video) => (
                   <VideoThumb
                     key={video.id}
@@ -106,8 +106,8 @@ function VideoThumb({
       type="button"
       onClick={() => onPlay(video)}
       className={cn(
-        'group relative overflow-hidden rounded-xl bg-black text-left',
-        featured ? 'aspect-[4/5] sm:aspect-[3/4]' : 'aspect-[9/16]'
+        'group relative min-h-0 w-full overflow-hidden rounded-xl bg-black text-left',
+        featured ? 'aspect-[9/16] md:row-span-3' : 'aspect-[9/16] md:aspect-auto md:h-full'
       )}
       aria-label={`${content.a11y.playVideo}: ${video.title[locale]}`}
     >
@@ -115,12 +115,17 @@ function VideoThumb({
         src={video.thumbnail}
         alt={video.thumbnailAlt[locale]}
         fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        sizes={featured ? '(max-width: 1024px) 60vw, 360px' : '140px'}
+        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+        sizes={featured ? '(max-width: 768px) 50vw, (max-width: 1024px) 70vw, 420px' : '(max-width: 768px) 50vw, 180px'}
       />
       <div className="absolute inset-0 bg-black/25" />
-      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-3">
-        <p className={cn('font-medium text-white', featured ? 'text-sm' : 'text-[11px]')}>
+      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-2 sm:p-3">
+        <p
+          className={cn(
+            'line-clamp-2 font-medium text-white',
+            featured ? 'text-sm' : 'text-[11px] leading-tight'
+          )}
+        >
           {video.title[locale]}
         </p>
       </div>
@@ -128,10 +133,10 @@ function VideoThumb({
         <span
           className={cn(
             'flex items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm',
-            featured ? 'h-14 w-14' : 'h-8 w-8'
+            featured ? 'h-12 w-12 md:h-14 md:w-14' : 'h-10 w-10 md:h-8 md:w-8'
           )}
         >
-          <PlayIcon className={featured ? 'ml-0.5 h-6 w-6' : 'ml-0.5 h-3.5 w-3.5'} />
+          <PlayIcon className={featured ? 'ml-0.5 h-5 w-5 md:h-6 md:w-6' : 'ml-0.5 h-4 w-4 md:h-3.5 md:w-3.5'} />
         </span>
       </div>
     </button>

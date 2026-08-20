@@ -9,7 +9,7 @@ export default function NotFound() {
   const content = getContent(locale);
 
   return (
-    <section className="flex min-h-[60vh] items-center bg-cream pt-24">
+    <section className="flex min-h-[60svh] items-center bg-cream pt-page">
       <Container className="text-center">
         <h1 className="font-display text-4xl font-bold text-black">
           {content.errors.notFound}

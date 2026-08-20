@@ -167,5 +167,16 @@ export function getLocationById(id: Location['id']): Location | undefined {
   return locations.find((l) => l.id === id);
 }
 
+/** Google Maps embed URL for a location */
+export function getMapEmbedUrl(location: Location, zoom = 15): string {
+  const query = encodeURIComponent(location.formatted);
+  return `https://maps.google.com/maps?q=${query}&z=${zoom}&output=embed`;
+}
+
+/** Primary location map embed (Silver Spring) */
+export function getPrimaryMapEmbedUrl(zoom = 15): string {
+  return getMapEmbedUrl(locations[0], zoom);
+}
+
 /** Default directions URL — Silver Spring as primary */
 export const defaultDirectionsUrl = locations[0].directionsUrl;

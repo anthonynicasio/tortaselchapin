@@ -32,6 +32,10 @@ export function Header({ locale, content }: HeaderProps) {
   }, []);
 
   useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
@@ -50,12 +54,12 @@ export function Header({ locale, content }: HeaderProps) {
     <>
       <header
         className={cn(
-          'fixed top-0 right-0 left-0 z-50 transition-all duration-300',
+          'fixed top-0 right-0 left-0 z-50 pt-[env(safe-area-inset-top,0px)] transition-all duration-300',
           scrolled || menuOpen ? 'bg-black/95 shadow-lg backdrop-blur-md' : 'bg-transparent'
         )}
       >
         <Container as="nav" aria-label={content.a11y.mainNav}>
-          <div className="flex h-[4.5rem] items-center justify-between gap-4">
+          <div className="flex h-[var(--header-height)] items-center justify-between gap-2 sm:gap-4">
             <Logo className="shrink-0" locale={locale} size="sm" />
 
             <ul className="hidden items-center gap-8 md:flex">
@@ -80,7 +84,7 @@ export function Header({ locale, content }: HeaderProps) {
               })}
             </ul>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-3">
               <LanguageSwitcher
                 locale={locale}
                 currentSlug={currentSlug}
@@ -98,7 +102,7 @@ export function Header({ locale, content }: HeaderProps) {
               </Button>
               <button
                 type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-lg text-white md:hidden"
+                className="flex h-11 w-11 items-center justify-center rounded-lg text-white md:hidden"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-expanded={menuOpen}
                 aria-label={menuOpen ? content.a11y.closeMenu : content.a11y.openMenu}
@@ -117,7 +121,7 @@ export function Header({ locale, content }: HeaderProps) {
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/95 pt-[4.5rem] md:hidden">
+        <div className="fixed inset-0 z-40 overflow-y-auto bg-black/95 pt-[var(--header-offset)] pb-[var(--mobile-bar-offset)] md:hidden">
           <nav className="flex flex-col gap-1 p-6" aria-label={content.a11y.mainNav}>
             {navRoutes.map(({ key, labelKey }) => (
               <Link

@@ -12,7 +12,9 @@
   --color-earth: #6b4423;
   --color-gray: #6b6560;
   --header-height: 4.5rem;
+  --header-offset: calc(var(--header-height) + env(safe-area-inset-top, 0px));
   --mobile-bar-height: 4rem;
+  --mobile-bar-offset: calc(var(--mobile-bar-height) + env(safe-area-inset-bottom, 0px));
 }
 
 @theme inline {
@@ -33,6 +35,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -53,8 +58,21 @@
     background-color: var(--color-cream);
     color: var(--color-black);
     font-family: var(--font-body), system-ui, sans-serif;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: rgb(251 192 45 / 0.25);
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+  }
+
+  a,
+  button {
+    touch-action: manipulation;
   }
 
   ::selection {
@@ -75,11 +93,32 @@
 
   .hero-gradient {
     background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.82) 0%,
-      rgba(0, 0, 0, 0.45) 48%,
-      rgba(0, 0, 0, 0.15) 100%
+      180deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.68) 42%,
+      rgba(0, 0, 0, 0.9) 100%
     );
+  }
+
+  @media (min-width: 768px) {
+    .hero-gradient {
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.82) 0%,
+        rgba(0, 0, 0, 0.45) 48%,
+        rgba(0, 0, 0, 0.15) 100%
+      );
+    }
+  }
+
+  .pt-page {
+    padding-top: calc(var(--header-offset) + 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .pt-page {
+      padding-top: calc(var(--header-offset) + 2.5rem);
+    }
   }
 
   .scrollbar-hide {
@@ -92,7 +131,7 @@
   }
 
   .pb-mobile-bar {
-    padding-bottom: var(--mobile-bar-height);
+    padding-bottom: var(--mobile-bar-offset);
   }
 
   .sr-only {

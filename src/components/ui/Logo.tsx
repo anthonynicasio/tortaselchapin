@@ -39,11 +39,11 @@ export function Logo({
         priority={size === 'sm'}
       />
       {showWordmark && (
-        <span className="hidden flex-col leading-none sm:flex">
-          <span className="font-display text-[15px] tracking-tight text-white sm:text-lg">
+        <span className="hidden min-[400px]:flex min-w-0 flex-col leading-none">
+          <span className="font-display text-[13px] tracking-tight text-white sm:text-[15px] md:text-lg">
             Tortas El Chapín
           </span>
-          <Stars className="mt-1 text-gold" />
+          <Stars className="mt-1 hidden text-gold sm:flex" />
         </span>
       )}
     </Link>

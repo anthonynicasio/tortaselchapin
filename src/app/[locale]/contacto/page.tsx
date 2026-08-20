@@ -40,7 +40,7 @@ export default async function ContactPageEs({ params }: Props) {
 
   return (
     <>
-      <section className="bg-black pt-24 pb-8 md:pt-28">
+      <section className="bg-black pt-page pb-8">
         <Container>
           <SectionHeading as="h1" className="text-cream">
             {content.contactPage.heading}
@@ -54,27 +54,27 @@ export default async function ContactPageEs({ params }: Props) {
       <section className="bg-cream py-16">
         <Container>
           <div className="grid gap-10 md:grid-cols-3">
-            <div className="rounded-sm bg-cream-dark p-8 text-center">
+            <div className="rounded-xl bg-cream-dark p-6 text-center sm:p-8">
               <h2 className="font-display text-xl font-bold">{content.contactPage.callUs}</h2>
               <p className="mt-4">
                 <a
                   href={business.phoneHref}
-                  className="text-2xl font-bold text-red transition-colors hover:text-red-hover"
+                  className="text-xl font-bold break-all text-red transition-colors hover:text-red-hover sm:text-2xl"
                 >
                   {business.phone}
                 </a>
               </p>
-              <Button href={business.phoneHref} variant="primary" size="md" className="mt-6">
+              <Button href={business.phoneHref} variant="primary" size="md" className="mt-6 w-full">
                 {content.locations.call}
               </Button>
             </div>
 
-            <div className="rounded-sm bg-cream-dark p-8 text-center">
+            <div className="rounded-xl bg-cream-dark p-6 text-center sm:p-8">
               <h2 className="font-display text-xl font-bold">{content.contactPage.visitUs}</h2>
               <p className="mt-4 text-gray">{content.contactPage.subheading}</p>
             </div>
 
-            <div className="rounded-sm bg-cream-dark p-8 text-center">
+            <div className="rounded-xl bg-cream-dark p-6 text-center sm:p-8">
               <h2 className="font-display text-xl font-bold">{content.contactPage.followUs}</h2>
               <div className="mt-4 space-y-2">
                 <a

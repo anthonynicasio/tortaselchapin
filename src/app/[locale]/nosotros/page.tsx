@@ -37,7 +37,7 @@ export default async function AboutPageEs({ params }: Props) {
 
   return (
     <>
-      <section className="bg-black pt-24 pb-8 md:pt-28">
+      <section className="bg-black pt-page pb-8">
         <Container>
           <SectionHeading as="h1" className="text-cream">
             {content.aboutPage.heading}

@@ -46,7 +46,7 @@ export function MenuFavoritesSection({ locale, content }: MenuFavoritesProps) {
         </div>
 
         <div className="mt-10 text-center">
-          <Button href={getNavHref(locale, 'menu')} variant="primary" size="lg">
+          <Button href={getNavHref(locale, 'menu')} variant="primary" size="lg" className="w-full sm:w-auto">
             {content.menuFavorites.viewAll}
             <ArrowRightIcon className="h-5 w-5" />
           </Button>

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { alfaSlab, dmSans } from '@/lib/fonts';
 import { isValidLocale, type Locale } from '@/lib/locale';
@@ -8,6 +8,13 @@ import { Footer } from '@/components/layout/Footer';
 import { MobileBar } from '@/components/layout/MobileBar';
 import { cn } from '@/lib/utils';
 import '../globals.css';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#111111',
+};
 
 type Props = {
   children: React.ReactNode;

@@ -47,7 +47,7 @@ export function Footer({ locale, content }: FooterProps) {
             <ul className="space-y-2 text-sm text-white/75">
               {navRoutes.map(({ key, labelKey }) => (
                 <li key={key}>
-                  <Link href={getNavHref(locale, key)} className="transition-colors hover:text-gold">
+                  <Link href={getNavHref(locale, key)} className="inline-block py-1.5 transition-colors hover:text-gold">
                     {navLabels[labelKey]}
                   </Link>
                 </li>

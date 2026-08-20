@@ -18,9 +18,9 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: 'px-4 py-2 text-sm min-h-[40px]',
-  md: 'px-6 py-3 text-base min-h-[48px]',
-  lg: 'px-8 py-4 text-lg min-h-[52px]',
+  sm: 'px-4 py-2.5 text-sm min-h-11',
+  md: 'px-5 py-3 text-base min-h-12 sm:px-6',
+  lg: 'px-6 py-3.5 text-base min-h-12 sm:px-8 sm:py-4 sm:text-lg sm:min-h-[52px]',
 };
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -33,7 +33,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', href, external, children, ...props }, ref) => {
     const classes = cn(
-      'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold',
+      'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold',
       variants[variant],
       sizes[size],
       className

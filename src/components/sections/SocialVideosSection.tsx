@@ -36,7 +36,7 @@ export function SocialVideosSection({ locale, content, videos = socialVideos }: 
           </div>
 
           <div
-            className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 scrollbar-hide"
+            className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 scrollbar-hide sm:gap-4"
             aria-label={content.a11y.scrollVideos}
           >
             {videos.map((video) => (

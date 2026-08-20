@@ -28,8 +28,8 @@ export function LanguageSwitcher({
 
   const baseClasses =
     variant === 'header'
-      ? 'text-sm font-medium'
-      : 'text-sm font-medium text-cream/70';
+      ? 'inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium'
+      : 'inline-flex min-h-11 items-center text-sm font-medium text-cream/70';
 
   return (
     <nav aria-label={content.a11y.languageSelector} className="flex items-center gap-1">
@@ -37,7 +37,7 @@ export function LanguageSwitcher({
         href={esPath}
         className={cn(
           baseClasses,
-          'rounded-sm px-2 py-1 transition-colors hover:text-gold',
+          'rounded-sm px-2.5 py-1 transition-colors hover:text-gold',
           locale === 'es' ? 'text-gold' : 'text-white/55'
         )}
         aria-current={locale === 'es' ? 'true' : undefined}
@@ -52,7 +52,7 @@ export function LanguageSwitcher({
         href={enPath}
         className={cn(
           baseClasses,
-          'rounded-sm px-2 py-1 transition-colors hover:text-gold',
+          'rounded-sm px-2.5 py-1 transition-colors hover:text-gold',
           locale === 'en' ? 'text-gold' : 'text-white/55'
         )}
         aria-current={locale === 'en' ? 'true' : undefined}

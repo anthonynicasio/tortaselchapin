@@ -54,21 +54,21 @@ export function VideoModal({ video, locale, content, onClose }: VideoModalProps)
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 pt-[calc(1rem+env(safe-area-inset-top,0px))] pb-[calc(1rem+env(safe-area-inset-bottom,0px))]"
       role="dialog"
       aria-modal="true"
       aria-label={video.title[locale]}
       onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-sm"
+        className="relative flex max-h-full w-full max-w-sm flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           ref={closeButtonRef}
           type="button"
           onClick={handleClose}
-          className="absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-sm text-cream transition-colors hover:bg-white/10"
+          className="mb-3 ml-auto flex h-11 w-11 items-center justify-center rounded-lg text-cream transition-colors hover:bg-white/10"
           aria-label={content.a11y.closeVideo}
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -76,10 +76,10 @@ export function VideoModal({ video, locale, content, onClose }: VideoModalProps)
           </svg>
         </button>
 
-        <div className="overflow-hidden rounded-sm bg-black shadow-2xl">
+        <div className="min-h-0 overflow-hidden rounded-xl bg-black shadow-2xl">
           <video
             ref={videoRef}
-            className="aspect-[9/16] w-full bg-black object-contain"
+            className="max-h-[min(70dvh,calc(100dvh-10rem))] w-full bg-black object-contain"
             controls
             playsInline
             preload="none"
@@ -124,7 +124,7 @@ export function VideoCard({ video, locale, content, onPlay, className }: VideoCa
       type="button"
       onClick={() => onPlay(video)}
       className={cn(
-        'group relative w-[200px] shrink-0 overflow-hidden rounded-sm text-left sm:w-[220px]',
+        'group relative w-[min(42vw,200px)] shrink-0 snap-start overflow-hidden rounded-sm text-left sm:w-[220px]',
         className
       )}
       aria-label={`${content.a11y.playVideo}: ${video.title[locale]}`}

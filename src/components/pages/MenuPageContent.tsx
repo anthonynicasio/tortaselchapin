@@ -31,7 +31,7 @@ export function MenuPageContent({ locale, content }: MenuPageContentProps) {
     setActiveCategory(cat);
     const el = document.getElementById(cat);
     if (el) {
-      const offset = 120;
+      const offset = 132;
       const top = el.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
@@ -41,17 +41,17 @@ export function MenuPageContent({ locale, content }: MenuPageContentProps) {
     <>
       {/* Sticky category nav */}
       <nav
-        className="sticky top-16 z-30 border-b border-black/10 bg-cream/95 backdrop-blur-md"
+        className="sticky top-[var(--header-offset)] z-30 border-b border-black/10 bg-cream/95 backdrop-blur-md"
         aria-label={content.menuPage.categoryNav}
       >
         <Container>
-          <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
+          <div className="-mx-4 flex gap-1 overflow-x-auto px-4 py-2.5 scrollbar-hide sm:mx-0 sm:px-0 sm:py-3">
             {categories.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => scrollToCategory(cat)}
-                className={`shrink-0 rounded-sm px-4 py-2 text-sm font-semibold transition-colors ${
+                className={`min-h-11 shrink-0 rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
                   activeCategory === cat
                     ? 'bg-red text-white'
                     : 'text-black hover:bg-black/5'
@@ -71,7 +71,7 @@ export function MenuPageContent({ locale, content }: MenuPageContentProps) {
           if (items.length === 0) return null;
 
           return (
-            <section key={cat} id={cat} className="mb-16 scroll-mt-32">
+            <section key={cat} id={cat} className="mb-16 scroll-mt-[calc(var(--header-offset)+4.5rem)]">
               <h2 className="font-display text-3xl font-bold text-black">
                 {content.menuCategories[cat]}
               </h2>

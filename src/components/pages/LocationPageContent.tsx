@@ -4,7 +4,7 @@ import type { Content } from '@/lib/content';
 import type { Locale } from '@/lib/locale';
 import { getNavHref } from '@/lib/locale';
 import { business } from '@content/shared/business';
-import type { Location } from '@content/shared/locations';
+import { getMapEmbedUrl, type Location } from '@content/shared/locations';
 import { social } from '@content/shared/social';
 import { getVideosForLocation } from '@content/shared/videos';
 import { SocialVideosSection } from '@/components/sections/SocialVideosSection';
@@ -27,9 +27,9 @@ export function LocationPageContent({
 
   return (
     <>
-      <section className="bg-black pt-32 pb-12">
+      <section className="bg-black pt-page pb-12">
         <Container>
-          <h1 className="font-display text-4xl text-white sm:text-5xl md:text-6xl">
+          <h1 className="font-display text-3xl text-balance text-white sm:text-5xl md:text-6xl">
             Tortas El Chapín — {location.name[locale]}
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-white/80">{intro}</p>
@@ -49,14 +49,14 @@ export function LocationPageContent({
               </p>
             </address>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button href={location.directionsUrl} external variant="primary" size="md">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button href={location.directionsUrl} external variant="primary" size="md" className="w-full sm:w-auto">
                 {content.locationPage.directionsCta}
               </Button>
-              <Button href={business.phoneHref} variant="secondary" size="md">
+              <Button href={business.phoneHref} variant="secondary" size="md" className="w-full sm:w-auto">
                 {content.locationPage.callCta}
               </Button>
-              <Button href={getNavHref(locale, 'menu')} variant="outline" size="md">
+              <Button href={getNavHref(locale, 'menu')} variant="outline" size="md" className="w-full sm:w-auto">
                 {content.locationPage.menuCta}
               </Button>
             </div>
@@ -67,9 +67,9 @@ export function LocationPageContent({
               </h3>
               <ul className="mt-3 space-y-2">
                 {location.hours.map((h) => (
-                  <li key={h.day} className="flex justify-between text-gray">
-                    <span>{days[h.day as keyof typeof days]}</span>
-                    <span>
+                  <li key={h.day} className="flex justify-between gap-4 text-sm text-gray sm:text-base">
+                    <span className="min-w-0">{days[h.day as keyof typeof days]}</span>
+                    <span className="shrink-0 tabular-nums">
                       {h.closed
                         ? content.locations.closed
                         : `${h.open} – ${h.close}`}
@@ -111,11 +111,11 @@ export function LocationPageContent({
           </div>
 
           <div>
-            <div className="overflow-hidden rounded-sm shadow-lg">
+            <div className="overflow-hidden rounded-xl shadow-lg">
               <iframe
                 title={`${content.a11y.mapEmbed} — ${location.name[locale]}`}
-                src={`https://maps.google.com/maps?q=${location.coordinates.lat},${location.coordinates.lng}&z=15&output=embed`}
-                className="aspect-[4/3] w-full border-0"
+                src={getMapEmbedUrl(location)}
+                className="aspect-[4/3] w-full max-w-full border-0"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
