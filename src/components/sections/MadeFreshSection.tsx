@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Container, SectionHeading } from '@/components/ui/Container';
 import { VideoModal } from '@/components/ui/VideoPlayer';
 import { PlayIcon, TikTokIcon, ArrowRightIcon } from '@/components/ui/Icons';
@@ -110,8 +111,15 @@ function VideoThumb({
       )}
       aria-label={`${content.a11y.playVideo}: ${video.title[locale]}`}
     >
-      <div className="absolute inset-0 bg-[#1a1a1a] transition-colors group-hover:bg-[#242424]" />
-      <div className="absolute inset-x-0 bottom-0 p-3">
+      <Image
+        src={video.thumbnail}
+        alt={video.thumbnailAlt[locale]}
+        fill
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        sizes={featured ? '(max-width: 1024px) 60vw, 360px' : '140px'}
+      />
+      <div className="absolute inset-0 bg-black/25" />
+      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-3">
         <p className={cn('font-medium text-white', featured ? 'text-sm' : 'text-[11px]')}>
           {video.title[locale]}
         </p>

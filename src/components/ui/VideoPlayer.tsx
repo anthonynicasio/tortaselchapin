@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import type { VideoItem } from '@content/shared/videos';
 import type { Content } from '@/lib/content';
 import { cn } from '@/lib/utils';
@@ -82,6 +83,7 @@ export function VideoModal({ video, locale, content, onClose }: VideoModalProps)
             controls
             playsInline
             preload="none"
+            poster={video.thumbnail}
           >
             <track kind="captions" />
           </video>
@@ -127,7 +129,16 @@ export function VideoCard({ video, locale, content, onPlay, className }: VideoCa
       )}
       aria-label={`${content.a11y.playVideo}: ${video.title[locale]}`}
     >
-      <div className="relative aspect-[9/16] bg-[#1a1a1a]">
+      <div className="relative aspect-[9/16] overflow-hidden rounded-xl bg-black">
+        <Image
+          src={video.thumbnail}
+          alt={video.thumbnailAlt[locale]}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="220px"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-black/20 transition-colors group-hover:bg-black/10" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-cream backdrop-blur-sm transition-transform group-hover:scale-110">
             <svg className="ml-0.5 h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
