@@ -22,9 +22,14 @@ export function MenuPageContent({ locale, content }: MenuPageContentProps) {
 
   useEffect(() => {
     const hash = window.location.hash.slice(1) as MenuCategory;
-    if (hash && categories.includes(hash)) {
-      setActiveCategory(hash);
-    }
+    if (!hash || !categories.includes(hash)) return;
+
+    const el = document.getElementById(hash);
+    if (!el) return;
+
+    const offset = 132;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'instant' });
   }, [categories]);
 
   const scrollToCategory = (cat: MenuCategory) => {
