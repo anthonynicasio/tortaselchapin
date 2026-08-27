@@ -3,6 +3,7 @@ import { Picture } from 'astro:assets';
 
 import brandFoodTruck from '../../assets/brand-food-truck.png';
 import Breadcrumbs from '../Breadcrumbs.astro';
+import { business } from '../../data/business';
 import { localizedPath, t, type Locale } from '../../i18n/utils';
 import Base from '../../layouts/Base.astro';
 import { breadcrumbSchema, organizationSchema } from './schema';
@@ -38,7 +39,7 @@ const graph = [
     <section class="section about-page">
       <div class="container about-grid">
         <div class="about-copy">
-          <p class="eyebrow">{t(locale, 'footer.tagline')}</p>
+          <p class="eyebrow">{business.name}</p>
           <h1>{t(locale, 'about.heading')}</h1>
           <p class="body-copy">{t(locale, 'about.body')}</p>
           <p class="tagline">{t(locale, 'home.why.heading')}</p>

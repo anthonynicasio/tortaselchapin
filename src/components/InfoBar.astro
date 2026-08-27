@@ -96,18 +96,36 @@ const location = getLocation(business.orderingLocationId);
 </div>
 
 <script>
+  // Windows mirror the published hours: Mon-Thu 5-10:30 PM, Fri 5-11 PM, Sat-Sun 12-11 PM (ET).
+  const OPEN_WINDOWS = {
+    weekday: [17 * 60, 22 * 60 + 30],
+    friday: [17 * 60, 23 * 60],
+    weekend: [12 * 60, 23 * 60],
+  } as const;
+
   for (const bar of document.querySelectorAll<HTMLElement>('[data-today-bar]')) {
-    const day = new Intl.DateTimeFormat('en-US', {
+    const parts = new Intl.DateTimeFormat('en-US', {
       timeZone: 'America/New_York',
       weekday: 'short',
-    })
-      .format(new Date())
-      .toLowerCase();
+      hour: 'numeric',
+      minute: 'numeric',
+      hourCycle: 'h23',
+    }).formatToParts(new Date());
+    const part = (type: string) =>
+      parts.find((item) => item.type === type)?.value ?? '';
+    const day = part('weekday').toLowerCase();
+    const minutes = Number(part('hour')) * 60 + Number(part('minute'));
     const key = day === 'fri' ? 'friday' : day === 'sat' || day === 'sun' ? 'weekend' : 'weekday';
+    const [opens, closes] = OPEN_WINDOWS[key];
     const text = bar.dataset[key];
     const value = bar.querySelector<HTMLElement>('[data-today-value]');
     const fallback = bar.querySelector<HTMLElement>('[data-today-fallback]');
-    if (!text || !value || !value.parentElement) continue;
+
+    // Keep the weekly fallback list when closed so the bar never claims to be open.
+    if (!text || !value || !value.parentElement || minutes < opens || minutes >= closes) {
+      continue;
+    }
+
     value.textContent = text;
     value.parentElement.hidden = false;
     if (fallback) fallback.hidden = true;

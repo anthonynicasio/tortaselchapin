@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 
 import Breadcrumbs from '../Breadcrumbs.astro';
 import MenuSection from '../MenuSection.astro';
+import { business } from '../../data/business';
 import { t, type Locale } from '../../i18n/utils';
 import type { MenuItem, SiteMenuSection } from '../../lib/catalog';
 import { isOrderingEnabled } from '../../lib/square';
@@ -24,10 +25,12 @@ const sectionIds: SiteMenuSection[] = [
   'pollo-con-papas',
   'bebidas',
 ];
-const sections = sectionIds.map((id) => ({
-  id,
-  items: menuItems.filter((item) => item.category === id),
-}));
+const sections = sectionIds
+  .map((id) => ({
+    id,
+    items: menuItems.filter((item) => item.category === id),
+  }))
+  .filter((section) => section.items.length > 0);
 const graph = [
   menuSchema(locale, sections),
   breadcrumbSchema(locale, [
@@ -55,7 +58,13 @@ const graph = [
       <div class="container">
         <h1>{t(locale, 'menu.heading')}</h1>
         <p>{t(locale, 'menu.intro')}</p>
-        {!orderingEnabled && <p class="ordering-note">{t(locale, 'menu.orderingUnavailable')}</p>}
+        {
+          !orderingEnabled && (
+            <a class="ordering-note" href={business.phoneHref}>
+              {t(locale, 'menu.orderingUnavailable')} {business.phoneDisplay}
+            </a>
+          )
+        }
       </div>
     </header>
 
@@ -136,14 +145,22 @@ const graph = [
   }
 
   .menu-hero .ordering-note {
-    width: fit-content;
-    padding: 0.5rem 0.7rem;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0.5rem 0.9rem;
     margin-top: 1rem;
-    border: 1px solid rgb(255 255 255 / 25%);
+    border: 1px solid rgb(255 255 255 / 35%);
     border-radius: var(--radius);
     color: var(--color-white);
-    font-size: 0.86rem;
+    font-size: 0.92rem;
     font-weight: 700;
+    text-decoration: none;
+    transition: background-color 160ms ease;
+  }
+
+  .menu-hero .ordering-note:hover {
+    background: rgb(255 255 255 / 12%);
   }
 
   .section-nav {

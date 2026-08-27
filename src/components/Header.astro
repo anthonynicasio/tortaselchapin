@@ -124,7 +124,12 @@ const isCurrent = (path: string) =>
     <div class="container mobile-nav__inner">
       {
         navItems.map((item) => (
-          <a href={localizedPath(locale, item.path)}>{t(locale, item.key)}</a>
+          <a
+            href={localizedPath(locale, item.path)}
+            aria-current={isCurrent(item.path) ? 'page' : undefined}
+          >
+            {t(locale, item.key)}
+          </a>
         ))
       }
       <a
@@ -300,6 +305,10 @@ const isCurrent = (path: string) =>
     border-bottom: 1px solid var(--color-line);
     font-weight: 700;
     text-decoration: none;
+  }
+
+  .mobile-nav a[aria-current='page'] {
+    color: var(--red);
   }
 
   .mobile-nav .button {
