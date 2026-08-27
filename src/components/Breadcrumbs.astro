@@ -1,0 +1,80 @@
+---
+import { localizedPath, t, type Locale } from '../i18n/utils';
+
+export type BreadcrumbItem = {
+  label: string;
+  path?: string;
+};
+
+export interface Props {
+  locale: Locale;
+  items: BreadcrumbItem[];
+}
+
+const { locale, items } = Astro.props;
+const crumbs: BreadcrumbItem[] = [
+  { label: t(locale, 'breadcrumbs.home'), path: '/' },
+  ...items,
+];
+---
+
+<nav class="breadcrumbs" aria-label={t(locale, 'a11y.breadcrumbs')}>
+  <ol>
+    {
+      crumbs.map((item, index) => {
+        const isLast = index === crumbs.length - 1;
+        return (
+          <li>
+            {item.path && !isLast ? (
+              <a href={localizedPath(locale, item.path)}>{item.label}</a>
+            ) : (
+              <span aria-current={isLast ? 'page' : undefined}>{item.label}</span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    padding-block: 1rem;
+  }
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    list-style: none;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  li:not(:last-child)::after {
+    content: "/";
+    color: var(--color-line);
+  }
+
+  a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    color: var(--color-red-dark);
+    font-weight: 700;
+  }
+
+  span[aria-current="page"] {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+</style>

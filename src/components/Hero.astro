@@ -1,0 +1,281 @@
+---
+import { Picture } from 'astro:assets';
+
+import brandFoodTruck from '../assets/brand-food-truck.png';
+import { business } from '../data/business';
+import { localizedPath, t, type Locale } from '../i18n/utils';
+import Doodle from './Doodle.astro';
+
+export interface Props {
+  locale: Locale;
+  orderingEnabled: boolean;
+}
+
+const { locale, orderingEnabled } = Astro.props;
+const primaryHref = orderingEnabled
+  ? localizedPath(locale, '/order')
+  : business.phoneHref;
+const primaryLabel = orderingEnabled
+  ? t(locale, 'home.hero.orderNow')
+  : t(locale, 'home.hero.callToOrder');
+---
+
+<section class="hero">
+  <div class="hero__texture" aria-hidden="true"></div>
+  <div class="container hero__inner">
+    <div class="hero__content fade-in">
+      <p class="eyebrow hero__eyebrow">{t(locale, 'home.hero.eyebrow')}</p>
+      <h1>
+        <span>{t(locale, 'home.hero.headlineLead')}</span>
+        <span class="hero__headline-accent">{t(locale, 'home.hero.headlineAccent')}</span>
+      </h1>
+      <p class="hero__subhead">{t(locale, 'home.hero.subhead')}</p>
+      <div class="hero__actions">
+        <a class="button hero__menu-button" href={localizedPath(locale, '/menu')}>
+          {t(locale, 'home.hero.seeMenu')}
+        </a>
+        <a class="button hero__order-button" href={primaryHref}>{primaryLabel}</a>
+      </div>
+    </div>
+
+    <div class="hero__media">
+      <div class="hero__art">
+        <Picture
+          src={brandFoodTruck}
+          formats={['avif', 'webp']}
+          fallbackFormat="png"
+          width={720}
+          height={720}
+          alt={t(locale, 'home.hero.photoAlt')}
+          loading="eager"
+          fetchpriority="high"
+          decoding="sync"
+          quality={82}
+        />
+      </div>
+      <Doodle kind="sparkle" color="gold" size={34} class="hero-doodle hero-doodle--sparkle doodle--keep" />
+      <Doodle kind="lines" color="red" size={42} class="hero-doodle hero-doodle--lines" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: var(--paper);
+    background:
+      radial-gradient(circle at 90% 36%, rgb(255 92 20 / 48%), transparent 34%),
+      radial-gradient(circle at 8% 15%, rgb(200 16 46 / 42%), transparent 32%),
+      linear-gradient(115deg, #250408 0%, #111 45%, #281207 100%);
+  }
+
+  .hero::after {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 10%), transparent 32%, rgb(0 0 0 / 16%)),
+      radial-gradient(circle at 15% 82%, rgb(40 139 45 / 16%), transparent 28%);
+    content: "";
+    pointer-events: none;
+  }
+
+  .hero__texture {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    opacity: 0.24;
+    background-image:
+      radial-gradient(circle, rgb(255 255 255 / 24%) 0 1px, transparent 1.3px),
+      repeating-linear-gradient(
+        118deg,
+        transparent 0 18px,
+        rgb(255 255 255 / 3%) 19px,
+        transparent 20px 38px
+      );
+    background-size: 19px 19px, auto;
+    mask-image: linear-gradient(90deg, #000, transparent 62%, #000);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    padding-block: clamp(36px, 7vw, 64px) 0;
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #78c442;
+  }
+
+  .hero__eyebrow::after {
+    width: 44px;
+    height: 2px;
+    background: var(--red);
+    content: "";
+  }
+
+  h1 {
+    display: grid;
+    max-width: 700px;
+    margin-bottom: 20px;
+    color: var(--paper);
+    font-size: clamp(52px, 7vw, 90px);
+    line-height: 0.93;
+    text-shadow:
+      0 3px 0 rgb(0 0 0 / 28%),
+      0 12px 30px rgb(0 0 0 / 32%);
+  }
+
+  .hero__headline-accent {
+    position: relative;
+    width: fit-content;
+    margin-top: 8px;
+    color: var(--gold);
+    font-size: 0.72em;
+    line-height: 1;
+  }
+
+  .hero__headline-accent::after {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: -8px;
+    left: 0;
+    height: 6px;
+    border-radius: 100%;
+    background: #45ae39;
+    content: "";
+    transform: rotate(-1.5deg);
+  }
+
+  .hero__subhead {
+    max-width: 52ch;
+    margin-bottom: 24px;
+    color: rgb(255 255 255 / 92%);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero__actions .button {
+    min-width: 140px;
+  }
+
+  .hero__menu-button {
+    border-color: #3f9f35;
+    background: #3f9f35;
+  }
+
+  .hero__menu-button:hover {
+    border-color: #327f2a;
+    background: #327f2a;
+  }
+
+  .hero__order-button {
+    box-shadow: 0 10px 24px rgb(0 0 0 / 26%);
+  }
+
+  .hero__media {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 580px);
+    aspect-ratio: 1;
+    justify-self: center;
+    margin-top: 4px;
+  }
+
+  .hero__media::before {
+    position: absolute;
+    z-index: -1;
+    inset: 11%;
+    border-radius: 50%;
+    background:
+      radial-gradient(
+        circle,
+        rgb(242 183 5 / 30%) 0 38%,
+        rgb(200 16 46 / 24%) 39% 64%,
+        transparent 65%
+      );
+    content: "";
+    filter: blur(10px);
+  }
+
+  .hero__art {
+    width: 100%;
+    height: 100%;
+    filter:
+      drop-shadow(0 18px 24px rgb(0 0 0 / 36%))
+      drop-shadow(0 0 22px rgb(255 111 24 / 14%));
+  }
+
+  .hero__art :global(picture),
+  .hero__art :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__art :global(img) {
+    object-fit: contain;
+  }
+
+  .hero__media :global(.hero-doodle) {
+    z-index: 2;
+  }
+
+  .hero__media :global(.hero-doodle--sparkle) {
+    top: 20%;
+    left: 4%;
+  }
+
+  .hero__media :global(.hero-doodle--lines) {
+    right: 4%;
+    bottom: 24%;
+  }
+
+  @media (max-width: 899.98px) {
+    .hero__media :global(.hero-doodle--lines) {
+      display: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      min-height: 570px;
+    }
+
+    .hero__inner {
+      align-items: center;
+      min-height: 570px;
+      grid-template-columns: minmax(0, 0.98fr) minmax(430px, 1.02fr);
+      gap: clamp(24px, 4vw, 64px);
+    }
+
+    .hero__content {
+      padding-block: 56px;
+    }
+
+    .hero__media {
+      width: min(47vw, 590px);
+      margin-top: 0;
+      transform: scale(1.06);
+    }
+  }
+</style>

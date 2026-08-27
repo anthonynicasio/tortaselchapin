@@ -1,0 +1,171 @@
+---
+import { localizedPath, t, type Locale } from '../i18n/utils';
+import type { MenuItem as MenuItemData } from '../lib/catalog';
+import DishPhoto from './DishPhoto.astro';
+
+export interface Props {
+  locale: Locale;
+  items: MenuItemData[];
+}
+
+const { locale, items } = Astro.props;
+const formatPrice = (cents: number) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(cents / 100);
+
+const heading = t(locale, 'home.featured.heading');
+const headingWords = heading.trim().split(' ');
+const headingLastWord = headingWords.pop() ?? '';
+const headingLead = headingWords.join(' ');
+---
+
+<section class="section section--white">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">{t(locale, 'home.featured.eyebrow')}</p>
+      <h2>
+        {`${headingLead} `}<span class="underline-gold">{headingLastWord}</span>
+      </h2>
+      <p class="intro">{t(locale, 'home.featured.intro')}</p>
+    </div>
+
+    <div class="dish-grid">
+      {
+        items.map((item) => (
+          <article class="dish-card card">
+            <DishPhoto
+              alt={item.name[locale]}
+              item={item}
+              variant="card"
+            />
+            <div class="dish-card__body">
+              <div>
+                <h3>{item.name[locale]}</h3>
+                <p>{item.description[locale]}</p>
+              </div>
+              <div class="dish-card__footer">
+                <span class="price">
+                  {item.priceCents > 0
+                    ? formatPrice(item.priceCents)
+                    : t(locale, 'menu.pricePending')}
+                </span>
+                {item.priceCents <= 0 && (
+                  <Fragment set:html="<!-- [PLACEHOLDER: Add the verified menu price from Square.] -->" />
+                )}
+                <a href={localizedPath(locale, '/menu')}>
+                  {t(locale, 'home.featured.seeFullMenu')}
+                </a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro {
+    margin-top: 0.9rem;
+    font-size: 16px;
+  }
+
+  .dish-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .dish-card {
+    display: grid;
+    overflow: hidden;
+    align-items: start;
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+
+  .dish-card :global(.dish-photo) {
+    width: 120px;
+    height: 120px;
+    min-height: 120px;
+    aspect-ratio: 1;
+  }
+
+  .dish-card :global(.dish-photo img) {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .dish-card__body {
+    display: grid;
+    align-content: space-between;
+    gap: 0.9rem;
+    padding: 16px;
+  }
+
+  h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .dish-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+  }
+
+  .price {
+    color: var(--red);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .dish-card__footer a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    color: var(--red);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  @media (min-width: 640px) {
+    .dish-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dish-card {
+      grid-template-columns: none;
+      grid-template-rows: auto minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .dish-card :global(.dish-photo) {
+      width: auto;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+    }
+
+    .dish-card__body {
+      min-height: 190px;
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .dish-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

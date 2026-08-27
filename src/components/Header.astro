@@ -1,0 +1,365 @@
+---
+import { Image } from 'astro:assets';
+
+import brandWordmark from '../assets/brand-wordmark.png';
+import { business, getNap } from '../data/business';
+import {
+  alternatePath,
+  localizedPath,
+  t,
+  type Locale,
+} from '../i18n/utils';
+
+export interface Props {
+  locale: Locale;
+  currentPath: string;
+  orderingEnabled: boolean;
+}
+
+const { locale, currentPath, orderingEnabled } = Astro.props;
+const navItems = [
+  { key: 'header.menu', path: '/menu' },
+  { key: 'header.locations', path: '/locations' },
+  { key: 'header.about', path: '/about' },
+  { key: 'header.contact', path: '/contact' },
+];
+const languageHref = alternatePath(locale, currentPath);
+const languageLabel =
+  locale === 'en' ? t(locale, 'header.spanish') : t(locale, 'header.english');
+const languageCode = locale === 'en' ? 'es' : 'en';
+const actionHref = orderingEnabled
+  ? localizedPath(locale, '/order')
+  : business.phoneHref;
+const actionLabel = orderingEnabled
+  ? t(locale, 'header.orderNow')
+  : t(locale, 'header.callToOrder');
+
+const normalizePath = (path: string) => {
+  const trimmed = path.replace(/\/+$/, '');
+  return trimmed === '' ? '/' : trimmed;
+};
+const activePath = normalizePath(currentPath);
+const isCurrent = (path: string) =>
+  normalizePath(localizedPath(locale, path)) === activePath;
+---
+
+<header class="site-header" data-site-header>
+  <div class="utility">
+    <div class="container utility__inner">
+      <a class="utility__link" href={localizedPath(locale, '/locations/silver-spring')}>
+        <svg
+          class="utility__pin"
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="var(--gold)"
+          aria-hidden="true"
+        >
+          <path d="M12 2a7 7 0 0 0-7 7c0 3.4 2.4 6.9 7 13 4.6-6.1 7-9.6 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z" />
+        </svg>
+        <span>{getNap('silver-spring')}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="header-main">
+    <div class="container header-main__inner">
+      <a class="brand" href={localizedPath(locale, '/')} aria-label={`${business.name} - ${t(locale, 'header.home')}`}>
+        <Image
+          class="brand__logo"
+          src={brandWordmark}
+          width={320}
+          alt=""
+          format="webp"
+          quality={82}
+        />
+      </a>
+
+      <nav class="desktop-nav" aria-label={t(locale, 'a11y.mainNavigation')}>
+        {
+          navItems.map((item) => (
+            <a
+              href={localizedPath(locale, item.path)}
+              aria-current={isCurrent(item.path) ? 'page' : undefined}
+            >
+              {t(locale, item.key)}
+            </a>
+          ))
+        }
+        <a
+          class="language-link"
+          href={languageHref}
+          hreflang={languageCode}
+          lang={languageCode}
+        >
+          {languageLabel}
+        </a>
+        <a class="button header-action" href={actionHref}>{actionLabel}</a>
+      </nav>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={t(locale, 'a11y.openMenu')}
+        data-menu-toggle
+        data-open-label={t(locale, 'a11y.openMenu')}
+        data-close-label={t(locale, 'a11y.closeMenu')}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav
+    class="mobile-nav"
+    id="mobile-menu"
+    aria-label={t(locale, 'a11y.mainNavigation')}
+    data-mobile-menu
+    hidden
+  >
+    <div class="container mobile-nav__inner">
+      {
+        navItems.map((item) => (
+          <a href={localizedPath(locale, item.path)}>{t(locale, item.key)}</a>
+        ))
+      }
+      <a
+        href={languageHref}
+        hreflang={languageCode}
+        lang={languageCode}
+      >
+        {languageLabel}
+      </a>
+      <a class="button" href={actionHref}>{actionLabel}</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  for (const header of document.querySelectorAll<HTMLElement>('[data-site-header]')) {
+    const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menu = header.querySelector<HTMLElement>('[data-mobile-menu]');
+
+    if (!toggle || !menu) continue;
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute(
+        'aria-label',
+        open ? toggle.dataset.closeLabel ?? '' : toggle.dataset.openLabel ?? '',
+      );
+      menu.hidden = !open;
+      header.classList.toggle('is-open', open);
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    menu.addEventListener('click', (event) => {
+      if (event.target instanceof Element && event.target.closest('a')) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 40;
+    border-bottom: 5px solid var(--red);
+    background: #000;
+    box-shadow: 0 4px 20px rgb(27 27 27 / 8%);
+  }
+
+  .utility {
+    color: var(--paper);
+    background: var(--ink);
+  }
+
+  .utility__inner {
+    display: flex;
+    justify-content: center;
+    padding-block: 0.42rem;
+    overflow: hidden;
+  }
+
+  .utility__link {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .utility__link:hover span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .utility__link span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .utility__pin {
+    flex: 0 0 auto;
+  }
+
+  .header-main {
+    background: #000;
+  }
+
+  .header-main__inner {
+    display: flex;
+    min-height: 72px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand {
+    display: block;
+    flex: 0 0 auto;
+    text-decoration: none;
+  }
+
+  .brand__logo {
+    width: auto;
+    height: 52px;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--radius);
+    place-content: center;
+    gap: 5px;
+    color: var(--paper);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    transition:
+      transform 160ms ease,
+      opacity 160ms ease;
+  }
+
+  .is-open .menu-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .is-open .menu-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .is-open .menu-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    border-top: 1px solid var(--color-line);
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  .mobile-nav__inner {
+    display: grid;
+    padding-block: 0.6rem 1rem;
+  }
+
+  .mobile-nav a:not(.button) {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    border-bottom: 1px solid var(--color-line);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mobile-nav .button {
+    margin-top: 0.85rem;
+  }
+
+  @media (min-width: 900px) {
+    .site-header {
+      position: sticky;
+      top: 0;
+    }
+
+    .utility__inner {
+      justify-content: flex-start;
+    }
+
+    .header-main__inner {
+      min-height: 96px;
+    }
+
+    .brand__logo {
+      height: 72px;
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .desktop-nav > a:not(.button) {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      color: var(--paper);
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .desktop-nav > a:not(.button):hover,
+    .desktop-nav > a[aria-current='page'] {
+      text-decoration: underline 3px var(--red);
+      text-underline-offset: 6px;
+    }
+
+    .language-link {
+      padding-left: 28px;
+      border-left: 1px solid rgb(255 255 255 / 24%);
+    }
+
+    .header-action {
+      padding: 14px 22px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .menu-toggle,
+    .mobile-nav {
+      display: none;
+    }
+  }
+</style>

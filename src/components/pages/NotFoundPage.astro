@@ -1,0 +1,63 @@
+---
+import { localizedPath, t, type Locale } from '../../i18n/utils';
+import Base from '../../layouts/Base.astro';
+import { webPageSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const graph = [
+  webPageSchema(
+    locale,
+    '/404',
+    t(locale, 'seo.notFound.title'),
+    t(locale, 'seo.notFound.description'),
+  ),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, 'seo.notFound.title')}
+  description={t(locale, 'seo.notFound.description')}
+  canonicalPath="/404"
+  jsonLdGraph={graph}
+>
+  <main id="main-content" class="section not-found">
+    <div class="container">
+      <h1>{t(locale, 'notFound.heading')}</h1>
+      <p>{t(locale, 'notFound.body')}</p>
+      <div class="actions">
+        <a class="button" href={localizedPath(locale, '/')}>{t(locale, 'notFound.home')}</a>
+        <a class="button button--secondary" href={localizedPath(locale, '/menu')}>
+          {t(locale, 'notFound.menu')}
+        </a>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .not-found {
+    min-height: 58vh;
+    display: grid;
+    align-items: center;
+  }
+
+  h1 {
+    margin-bottom: 0.8rem;
+    font-size: clamp(3rem, 10vw, 6rem);
+  }
+
+  p {
+    color: var(--color-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+</style>

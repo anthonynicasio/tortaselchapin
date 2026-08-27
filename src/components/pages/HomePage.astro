@@ -1,0 +1,408 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+import shukoClasico from '../../assets/shuko-clasico.jpg';
+import tortaMixta from '../../assets/torta-mixta.png';
+import AccentRule from '../AccentRule.astro';
+import Doodle from '../Doodle.astro';
+import FeaturedDishes from '../FeaturedDishes.astro';
+import Hero from '../Hero.astro';
+import InfoBar from '../InfoBar.astro';
+import LocationCard from '../LocationCard.astro';
+import { localizedPath, t, type Locale } from '../../i18n/utils';
+import type { MenuItem, SiteMenuSection } from '../../lib/catalog';
+import { isOrderingEnabled } from '../../lib/square';
+import Base from '../../layouts/Base.astro';
+import { restaurantSchema, websiteSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const orderingEnabled = isOrderingEnabled();
+const entries = await getCollection('menu');
+const menuItems = entries.map((entry) => entry.data) as MenuItem[];
+const fixedSections: SiteMenuSection[] = [
+  'tortas',
+  'shukos',
+  'tacos',
+  'pollo-con-papas',
+  'bebidas',
+];
+const popularItems = menuItems.filter((item) => item.popular);
+const firstBySection = fixedSections
+  .map((section) => menuItems.find((item) => item.category === section))
+  .filter((item): item is MenuItem => Boolean(item));
+const featuredItems: MenuItem[] =
+  popularItems.length === 0 ? firstBySection.slice(0, 4) : popularItems.slice(0, 4);
+
+if (featuredItems.length < 4) {
+  for (const item of [...firstBySection, ...menuItems]) {
+    if (!featuredItems.some((featured) => featured.id === item.id)) {
+      featuredItems.push(item);
+    }
+
+    if (featuredItems.length === 4) break;
+  }
+}
+
+const whyHeading = t(locale, 'home.why.heading');
+const whyWords = whyHeading.trim().split(' ');
+const whyLastWord = whyWords.pop() ?? '';
+const whyLead = whyWords.join(' ');
+
+const graph = [
+  restaurantSchema(locale, 'silver-spring'),
+  restaurantSchema(locale, 'hyattsville'),
+  websiteSchema(locale),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, 'seo.home.title')}
+  description={t(locale, 'seo.home.description')}
+  canonicalPath="/"
+  jsonLdGraph={graph}
+>
+  <main id="main-content">
+    <Hero locale={locale} orderingEnabled={orderingEnabled} />
+    <FeaturedDishes locale={locale} items={featuredItems} />
+
+    <section class="regresa">
+      <div class="container regresa__grid">
+        <div class="regresa__media">
+          <!-- TODO: replace with cutout PNG/WebP layers: regresa-torta-cutout.webp, regresa-shuko-cutout.webp, regresa-salsa-cutout.webp -->
+          <Doodle kind="jalapeno" color="red" size={46} class="regresa-doodle--jalapeno" />
+          <Doodle kind="lines" color="red" size={40} class="regresa-doodle--lines" />
+          <Doodle kind="sparkle" color="gold" size={34} class="regresa-doodle--sparkle" />
+          <div class="regresa__shuko photo-sticker">
+            <Picture
+              src={shukoClasico}
+              formats={['avif', 'webp']}
+              fallbackFormat="jpeg"
+              width={520}
+              alt={t(locale, 'home.why.shukoAlt')}
+              quality={78}
+            />
+          </div>
+          <div class="regresa__torta photo-sticker">
+            <Picture
+              src={tortaMixta}
+              formats={['avif', 'webp']}
+              fallbackFormat="jpeg"
+              width={860}
+              alt={t(locale, 'home.why.tortaAlt')}
+              quality={80}
+            />
+          </div>
+        </div>
+
+        <div class="regresa__text">
+          <h2>
+            {`${whyLead} `}<span class="regresa__last-word">
+              {whyLastWord}
+              <Doodle kind="heart" color="red" size={36} class="regresa-doodle--heart" />
+            </span>
+          </h2>
+          <AccentRule />
+          <p class="regresa__body">
+            {`${t(locale, 'home.why.bodyLead')} `}<span class="regresa__cta">{t(locale, 'home.why.bodyEmphasis')}</span>
+          </p>
+        </div>
+
+        <ul class="badges" role="list">
+          <li>
+            <svg
+              class="badge-icon badge-icon--red"
+              viewBox="0 0 36 36"
+              width="36"
+              height="36"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 31C8.5 24 4.4 16.6 8.8 11.2 12.2 7 18 10 18 14.4 18 10 23.8 7 27.2 11.2 31.6 16.6 27.5 24 18 31Z" />
+            </svg>
+            <span>{t(locale, 'home.why.badgeMadeToOrder')}</span>
+          </li>
+          <li>
+            <svg
+              class="badge-icon badge-icon--gold"
+              viewBox="0 0 36 36"
+              width="36"
+              height="36"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 5C19.5 12.6 20.6 13.7 28 15 20.6 16.3 19.5 17.4 18 25 16.5 17.4 15.4 16.3 8 15 15.4 13.7 16.5 12.6 18 5ZM27.5 25v6M24.5 28h6" />
+            </svg>
+            <span>{t(locale, 'home.why.badgeBigPortions')}</span>
+          </li>
+          <li>
+            <svg
+              class="badge-icon badge-icon--green"
+              viewBox="0 0 36 36"
+              width="36"
+              height="36"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="18" cy="18" r="13.5" />
+              <path d="M18 10.5V18l5.3 3.4" />
+            </svg>
+            <span>{t(locale, 'home.why.badgeOpenLate')}</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section--white home-locations">
+      <div class="container">
+        <div class="info-bar-wrap">
+          <InfoBar locale={locale} />
+        </div>
+
+        <div class="locations-heading">
+          <div class="locations-heading__text">
+            <h2>{t(locale, 'home.locations.heading')}</h2>
+            <p>{t(locale, 'home.locations.body')}</p>
+          </div>
+          <a class="link-arrow" href={localizedPath(locale, '/locations')}>
+            {t(locale, 'home.locations.viewAll')}
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 12h17m0 0-6-6m6 6-6 6" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="location-grid">
+          <LocationCard locale={locale} locationId="silver-spring" />
+          <LocationCard locale={locale} locationId="hyattsville" />
+        </div>
+        <!-- [PLACEHOLDER: Add verified Silver Spring coordinates to Restaurant JSON-LD.] -->
+        <!-- [PLACEHOLDER: Add verified Hyattsville coordinates to Restaurant JSON-LD.] -->
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .regresa {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--section-y) calc(var(--section-y) + 48px);
+    background: var(--cream);
+  }
+
+  .regresa__grid {
+    display: grid;
+    gap: 28px;
+    grid-template-areas:
+      'text'
+      'media'
+      'badges';
+  }
+
+  .regresa__media {
+    position: relative;
+    grid-area: media;
+  }
+
+  .regresa__torta {
+    position: relative;
+    z-index: 2;
+    width: 84%;
+    margin-top: 24%;
+    transform: rotate(-4deg);
+  }
+
+  .regresa__shuko {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    width: 52%;
+    transform: rotate(3deg);
+  }
+
+  .regresa__media :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .regresa__media :global(.regresa-doodle--jalapeno) {
+    z-index: 3;
+    top: 4%;
+    left: 0;
+  }
+
+  .regresa__media :global(.regresa-doodle--lines) {
+    z-index: 3;
+    top: 44%;
+    left: -1%;
+  }
+
+  .regresa__media :global(.regresa-doodle--sparkle) {
+    z-index: 3;
+    top: -2%;
+    right: 40%;
+  }
+
+  .regresa__text {
+    grid-area: text;
+    align-self: center;
+  }
+
+  .regresa__text h2 {
+    margin-bottom: 0;
+  }
+
+  .regresa__last-word {
+    position: relative;
+  }
+
+  .regresa__text :global(.regresa-doodle--heart) {
+    bottom: 0.05em;
+    left: calc(100% + 16px);
+  }
+
+  .regresa__body {
+    max-width: 46ch;
+    margin-bottom: 0;
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .regresa__cta {
+    color: var(--red);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    grid-area: badges;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .badges li {
+    display: grid;
+    flex: 1 1 0;
+    justify-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .badges li + li {
+    border-left: 1px solid rgb(27 27 27 / 30%);
+  }
+
+  .badges span {
+    max-width: 96px;
+  }
+
+  .badge-icon--red {
+    color: var(--red);
+  }
+
+  .badge-icon--gold {
+    color: var(--gold);
+  }
+
+  .badge-icon--green {
+    color: #1e6b40;
+  }
+
+  .home-locations {
+    padding-top: 0;
+  }
+
+  .info-bar-wrap {
+    margin-top: -48px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .locations-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 24px;
+  }
+
+  .locations-heading__text h2 {
+    margin-bottom: 6px;
+  }
+
+  .locations-heading__text p {
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+
+  .location-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .regresa__grid {
+      align-items: center;
+      column-gap: 48px;
+      grid-template-areas:
+        'media text'
+        'media badges';
+      grid-template-columns: 1.02fr 0.98fr;
+      grid-template-rows: auto auto;
+    }
+
+    .regresa__media {
+      margin-left: -2%;
+    }
+
+    .badges {
+      align-self: start;
+      margin-top: 30px;
+    }
+  }
+
+  @media (min-width: 820px) {
+    .location-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

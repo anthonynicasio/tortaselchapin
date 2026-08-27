@@ -1,0 +1,277 @@
+---
+import Breadcrumbs from '../Breadcrumbs.astro';
+import Faq, { type FaqItem } from '../Faq.astro';
+import {
+  business,
+  formatAddress,
+  getLocation,
+  getNap,
+  type LocationId,
+} from '../../data/business';
+import { localizedPath, t, type Locale } from '../../i18n/utils';
+import { isOrderingEnabled } from '../../lib/square';
+import Base from '../../layouts/Base.astro';
+import { breadcrumbSchema, faqSchema, restaurantSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+  locationId: LocationId;
+}
+
+const { locale, locationId } = Astro.props;
+const location = getLocation(locationId);
+const orderingEnabled = isOrderingEnabled();
+const locationKey =
+  locationId === 'silver-spring' ? 'silverSpring' : 'hyattsville';
+const titleKey =
+  locationId === 'silver-spring' ? 'seo.silverSpring' : 'seo.hyattsville';
+const breadcrumbKey =
+  locationId === 'silver-spring'
+    ? 'breadcrumbs.silverSpring'
+    : 'breadcrumbs.hyattsville';
+const faqKey =
+  locationId === 'silver-spring' ? 'faq.silverSpring' : 'faq.hyattsville';
+const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(
+  formatAddress(location),
+)}&output=embed`;
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  formatAddress(location),
+)}`;
+const faqItems: FaqItem[] = [
+  {
+    question: t(locale, `${faqKey}.parkingQuestion`),
+    answer: t(locale, `${faqKey}.parkingAnswer`),
+    marker: 'parking',
+  },
+  {
+    question: t(locale, `${faqKey}.orderAheadQuestion`),
+    answer: t(locale, `${faqKey}.orderAheadAnswer`),
+  },
+  {
+    question: t(locale, `${faqKey}.deliveryQuestion`),
+    answer: t(locale, `${faqKey}.deliveryAnswer`),
+    marker: 'delivery',
+  },
+];
+const callOnly = locationId === 'hyattsville' || !orderingEnabled;
+const actionHref = callOnly
+  ? business.phoneHref
+  : localizedPath(locale, '/order');
+const actionLabel =
+  locationId === 'hyattsville'
+    ? t(locale, 'locationPages.hyattsville.call')
+    : orderingEnabled
+      ? t(locale, 'locationPages.silverSpring.orderHere')
+      : t(locale, 'buttons.call');
+const graph = [
+  restaurantSchema(locale, locationId),
+  breadcrumbSchema(locale, [
+    { name: t(locale, 'breadcrumbs.locations'), path: '/locations' },
+    {
+      name: t(locale, breadcrumbKey),
+      path: `/locations/${locationId}`,
+    },
+  ]),
+  faqSchema(faqItems),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, `${titleKey}.title`)}
+  description={t(locale, `${titleKey}.description`)}
+  canonicalPath={`/locations/${locationId}`}
+  jsonLdGraph={graph}
+  stickyLocation={locationId}
+>
+  <main id="main-content">
+    <div class="container">
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          {
+            label: t(locale, 'breadcrumbs.locations'),
+            path: '/locations',
+          },
+          { label: t(locale, breadcrumbKey) },
+        ]}
+      />
+    </div>
+
+    <header class="location-hero">
+      <div class="container">
+        <p class="eyebrow">{location.name}</p>
+        <h1>{t(locale, `locationPages.${locationKey}.heading`)}</h1>
+        <p class="intro">{t(locale, `locationPages.${locationKey}.intro`)}</p>
+        <p class="nap">{getNap(locationId)}</p>
+        <a class="button" href={actionHref}>{actionLabel}</a>
+      </div>
+    </header>
+
+    <section class="section section--white">
+      <div class="container location-grid">
+        <div class="hours-card">
+          <h2>{t(locale, 'hours.heading')}</h2>
+          <table>
+            <tbody>
+              <tr>
+                <th scope="row">{t(locale, 'hours.mondayToThursday')}</th>
+                <td>{t(locale, 'hours.mondayToThursdayValue')}</td>
+              </tr>
+              <tr>
+                <th scope="row">{t(locale, 'hours.friday')}</th>
+                <td>{t(locale, 'hours.fridayValue')}</td>
+              </tr>
+              <tr>
+                <th scope="row">{t(locale, 'hours.saturdayAndSunday')}</th>
+                <td>{t(locale, 'hours.weekendValue')}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>{t(locale, 'hours.confirm')}</p>
+        </div>
+
+        <div class="map-card">
+          <iframe
+            src={mapUrl}
+            title={`${t(locale, 'a11y.locationMap')}: ${location.name}`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <a href={directionsUrl} target="_blank" rel="noreferrer">
+            {t(locale, `locationPages.${locationKey}.mapFallback`)}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <Faq locale={locale} items={faqItems} />
+      <!-- [PLACEHOLDER: Add verified parking details.] -->
+      <!-- [PLACEHOLDER: Add a verified nearby landmark.] -->
+      <!-- [PLACEHOLDER: Add verified coordinates to Restaurant JSON-LD.] -->
+      {
+        locationId === 'hyattsville' && (
+          <Fragment set:html="<!-- [VERIFY: Confirm 1410 Merrimac Dr. Owner posts also show 1409.] -->" />
+        )
+      }
+    </div>
+  </main>
+</Base>
+
+<style>
+  .location-hero {
+    padding-block: clamp(3rem, 8vw, 6rem);
+    color: var(--color-white);
+    background: var(--color-ink);
+  }
+
+  .location-hero .eyebrow {
+    color: var(--color-gold);
+  }
+
+  h1 {
+    max-width: 920px;
+    margin-bottom: 1rem;
+    color: var(--color-white);
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
+  }
+
+  .intro {
+    max-width: 680px;
+    color: rgb(255 255 255 / 82%);
+    font-size: 1.08rem;
+  }
+
+  .nap {
+    max-width: 720px;
+    padding-top: 1rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid rgb(255 255 255 / 20%);
+    color: var(--color-white);
+    font-weight: 700;
+  }
+
+  .location-hero .button {
+    margin-top: 0.5rem;
+  }
+
+  .location-grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .hours-card,
+  .map-card {
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    box-shadow: var(--shadow);
+  }
+
+  .hours-card {
+    padding: clamp(1.4rem, 4vw, 2.3rem);
+  }
+
+  .hours-card h2 {
+    margin-bottom: 1rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--color-line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    padding-right: 1rem;
+    font-size: 0.85rem;
+  }
+
+  td {
+    color: var(--color-muted);
+  }
+
+  .hours-card p {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+  }
+
+  .map-card {
+    display: grid;
+    grid-template-rows: minmax(300px, 1fr) auto;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    border: 0;
+  }
+
+  .map-card a {
+    display: flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem;
+    color: var(--color-white);
+    background: var(--color-red);
+    font-weight: 700;
+  }
+
+  @media (min-width: 820px) {
+    .location-grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+  }
+</style>

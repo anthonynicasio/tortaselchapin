@@ -1,0 +1,325 @@
+{
+  "site": {
+    "name": "Tortas El Chapín",
+    "language": "Español"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido principal",
+    "mainNavigation": "Navegación principal",
+    "footerNavigation": "Navegación del pie de página",
+    "quickActions": "Acciones rápidas",
+    "languageSwitcher": "Idioma",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "externalLink": "Abre en una ventana nueva",
+    "menuSections": "Secciones del menú",
+    "quantityControls": "Controles de cantidad",
+    "cartCount": "Cantidad de productos en el carrito",
+    "locationMap": "Mapa de la ubicación",
+    "breadcrumbs": "Ruta de navegación"
+  },
+  "header": {
+    "home": "Inicio",
+    "menu": "Menú",
+    "locations": "Ubicaciones",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "orderNow": "Ordenar ahora",
+    "callToOrder": "Llamar para ordenar",
+    "english": "English",
+    "spanish": "Español"
+  },
+  "footer": {
+    "tagline": "Todo hecho al momento.",
+    "navigation": "Navegación",
+    "locations": "Ubicaciones",
+    "hours": "Horario",
+    "contact": "Contacto",
+    "follow": "Síguenos",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "facebookPending": "Enlace de Facebook pendiente",
+    "copyright": "Todos los derechos reservados."
+  },
+  "stickyBar": {
+    "call": "Llamar",
+    "directions": "Cómo llegar",
+    "order": "Ordenar",
+    "cart": "Carrito",
+    "item": "producto",
+    "items": "productos"
+  },
+  "infoBar": {
+    "today": "Hoy",
+    "weekdayValue": "Abierto hasta las 10:30 PM",
+    "fridayValue": "Abierto hasta las 11:00 PM",
+    "weekendValue": "Abierto hasta las 11:00 PM"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Sabor de verdad. Todo al momento.",
+      "headlineLead": "Tortas grandes. Sabor de verdad.",
+      "headlineAccent": "Hechas al momento.",
+      "subhead": "Tortas, shukos, tacos y pollo con papas, todo hecho cuando lo pides. Encuéntranos en Silver Spring y Hyattsville, MD.",
+      "orderNow": "Ordenar ahora",
+      "callToOrder": "Llamar para ordenar",
+      "seeMenu": "Ver el menú",
+      "photoAlt": "Logo del camión de comida Tortas El Chapín"
+    },
+    "featured": {
+      "eyebrow": "Menú",
+      "heading": "Cuatro platillos para comenzar.",
+      "intro": "Mira los platillos confirmados del menú.",
+      "seeFullMenu": "Ver el menú completo"
+    },
+    "why": {
+      "heading": "El que prueba, regresa.",
+      "bodyLead": "Porciones grandes. Pan tostado. Hecho al momento cuando lo pides.",
+      "bodyEmphasis": "Ven con hambre.",
+      "badgeMadeToOrder": "Hecho al momento",
+      "badgeBigPortions": "Porciones grandes",
+      "badgeOpenLate": "Abierto hasta tarde",
+      "shukoAlt": "Shuko Clásico",
+      "tortaAlt": "Torta Mixta"
+    },
+    "locations": {
+      "heading": "Dos locales en Maryland.",
+      "body": "Visítanos en Silver Spring o Hyattsville.",
+      "viewAll": "Ver las dos ubicaciones"
+    }
+  },
+  "menu": {
+    "title": "Menú",
+    "heading": "Menú",
+    "intro": "Todo hecho al momento. Porciones grandes, sabor de verdad, sin atajos.",
+    "sectionNavigation": "Secciones del menú",
+    "mostPopular": "Lo más pedido",
+    "pricePending": "Precio pendiente",
+    "photoComingSoon": "Foto próximamente",
+    "unavailable": "No disponible",
+    "add": "Agregar",
+    "added": "Agregado",
+    "addToCart": "Agregar al carrito",
+    "viewCart": "Ver carrito",
+    "orderingUnavailable": "Llama para ordenar.",
+    "emptySection": "No hay productos en esta sección.",
+    "categories": {
+      "tortas": "Tortas",
+      "shukos": "Shukos",
+      "tacos": "Tacos",
+      "pollo-con-papas": "Pollo con Papas",
+      "bebidas": "Bebidas"
+    }
+  },
+  "order": {
+    "title": "Ordenar",
+    "heading": "Tu orden",
+    "intro": "Recoge tu orden en el local de Silver Spring.",
+    "pickupLocation": "Lugar de recogida",
+    "pickupName": "Nombre para recoger",
+    "pickupNamePlaceholder": "Nombre para la orden",
+    "cart": "Carrito",
+    "quantity": "Cantidad",
+    "increaseQuantity": "Aumentar cantidad",
+    "decreaseQuantity": "Reducir cantidad",
+    "remove": "Quitar",
+    "subtotal": "Subtotal",
+    "checkout": "Pagar",
+    "emptyHeading": "Tu carrito está vacío.",
+    "emptyBody": "Agrega un platillo del menú.",
+    "browseMenu": "Ver el menú",
+    "disabledHeading": "Llama para ordenar.",
+    "disabledBody": "Los pedidos en línea no están disponibles ahora.",
+    "pickupOnly": "Solo para recoger",
+    "secureCheckout": "El pago continúa en Square.",
+    "pricePending": "Precio pendiente"
+  },
+  "thanks": {
+    "title": "Orden recibida",
+    "heading": "Gracias, {name}.",
+    "headingFallback": "Gracias.",
+    "body": "Recoge tu orden en 701 University Blvd E, Silver Spring, MD 20903.",
+    "hoursHeading": "Horario para recoger",
+    "call": "Llamar al restaurante",
+    "home": "Ir al inicio"
+  },
+  "error": {
+    "title": "Problema con la orden",
+    "heading": "No pudimos iniciar el pago.",
+    "body": "Inténtalo de nuevo o llámanos.",
+    "tryAgain": "Intentar de nuevo",
+    "call": "Llamar para ordenar",
+    "validation": "Revisa tu orden e inténtalo de nuevo.",
+    "orderingDisabled": "Los pedidos en línea no están disponibles ahora."
+  },
+  "locations": {
+    "title": "Ubicaciones",
+    "heading": "Nuestras ubicaciones",
+    "intro": "Visítanos en Silver Spring o Hyattsville.",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "hours": "Horario",
+    "directions": "Cómo llegar",
+    "viewLocation": "Ver ubicación",
+    "orderingLocation": "Local para pedidos en línea",
+    "callAhead": "Llama con anticipación"
+  },
+  "locationPages": {
+    "silverSpring": {
+      "title": "Silver Spring",
+      "heading": "Tortas El Chapín en Silver Spring",
+      "intro": "Encuéntranos en University Blvd E en Silver Spring. Los pedidos en línea se preparan en este local.",
+      "parkingNote": "[PLACEHOLDER: Agrega información confirmada sobre el estacionamiento en Silver Spring.]",
+      "nearbyLandmark": "[PLACEHOLDER: Agrega un punto de referencia cercano y confirmado.]",
+      "orderHere": "Ordenar para recoger aquí",
+      "mapFallback": "Abrir indicaciones para Silver Spring"
+    },
+    "hyattsville": {
+      "title": "Hyattsville",
+      "heading": "Tortas El Chapín en Hyattsville",
+      "intro": "Encuéntranos en Merrimac Dr en Hyattsville. Llama con anticipación para órdenes grandes.",
+      "parkingNote": "[PLACEHOLDER: Agrega información confirmada sobre el estacionamiento en Hyattsville.]",
+      "addressVerification": "[VERIFY: Confirma 1410 Merrimac Dr. Las publicaciones del dueño también muestran 1409.]",
+      "call": "Llamar al local de Hyattsville",
+      "mapFallback": "Abrir indicaciones para Hyattsville"
+    }
+  },
+  "faq": {
+    "heading": "Preguntas",
+    "silverSpring": {
+      "parkingQuestion": "¿Tienen estacionamiento?",
+      "parkingAnswer": "Llama al (240) 423-7602 para conocer los detalles actuales del estacionamiento.",
+      "orderAheadQuestion": "¿Puedo ordenar con anticipación?",
+      "orderAheadAnswer": "Sí. Los pedidos en línea se preparan en Silver Spring.",
+      "deliveryQuestion": "¿Hacen entregas?",
+      "deliveryAnswer": "No desde este sitio web."
+    },
+    "hyattsville": {
+      "parkingQuestion": "¿Tienen estacionamiento?",
+      "parkingAnswer": "Llama al (240) 423-7602 para conocer los detalles actuales del estacionamiento.",
+      "orderAheadQuestion": "¿Puedo ordenar con anticipación?",
+      "orderAheadAnswer": "Llama al (240) 423-7602 para ordenar con anticipación.",
+      "deliveryQuestion": "¿Hacen entregas?",
+      "deliveryAnswer": "No desde este sitio web."
+    }
+  },
+  "about": {
+    "title": "Nosotros",
+    "heading": "Hecho al momento, siempre.",
+    "body": "Tortas El Chapín es un negocio familiar con dos locales en Maryland. Hacemos tortas, shukos, tacos y pollo con papas como nos gusta comerlos: grandes, calientes y frescos. Nada se queda esperando bajo una lámpara. Tú pides, nosotros cocinamos, tú comes. El que prueba, regresa.",
+    "photoAlt": "Logo del camión de comida Tortas El Chapín para Silver Spring y Hyattsville",
+    "photoComingSoon": "Foto próximamente",
+    "seeLocations": "Ver nuestras ubicaciones"
+  },
+  "contact": {
+    "title": "Contacto",
+    "heading": "Contáctanos",
+    "intro": "Llámanos o visita cualquiera de los dos locales.",
+    "phone": "Teléfono",
+    "addresses": "Direcciones",
+    "hours": "Horario",
+    "social": "Redes sociales",
+    "catering": "¿Catering u órdenes grandes? Llámanos.",
+    "facebookPending": "URL de Facebook pendiente"
+  },
+  "breadcrumbs": {
+    "home": "Inicio",
+    "menu": "Menú",
+    "order": "Ordenar",
+    "locations": "Ubicaciones",
+    "silverSpring": "Silver Spring",
+    "hyattsville": "Hyattsville",
+    "about": "Nosotros",
+    "contact": "Contacto"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "heading": "Página no encontrada.",
+    "body": "La página que buscas no está aquí.",
+    "home": "Ir al inicio",
+    "menu": "Ver el menú"
+  },
+  "hours": {
+    "heading": "Horario",
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado",
+    "sunday": "Domingo",
+    "mondayToThursday": "Lunes a jueves",
+    "saturdayAndSunday": "Sábado y domingo",
+    "mondayToThursdayValue": "5:00 PM a 10:30 PM",
+    "fridayValue": "5:00 PM a 11:00 PM",
+    "weekendValue": "12:00 PM a 11:00 PM",
+    "today": "Horario de hoy",
+    "open": "Abierto",
+    "closed": "Cerrado",
+    "confirm": "Confirma el horario antes de visitarnos."
+  },
+  "buttons": {
+    "call": "Llamar",
+    "callToOrder": "Llamar para ordenar",
+    "directions": "Cómo llegar",
+    "orderNow": "Ordenar ahora",
+    "seeMenu": "Ver el menú",
+    "viewDetails": "Ver detalles",
+    "goBack": "Regresar",
+    "home": "Inicio",
+    "close": "Cerrar",
+    "continue": "Continuar"
+  },
+  "placeholders": {
+    "pricePending": "Precio pendiente",
+    "photoComingSoon": "Foto próximamente",
+    "linkPending": "Enlace pendiente",
+    "detailsPending": "Detalles pendientes"
+  },
+  "seo": {
+    "home": {
+      "title": "Tortas El Chapín | Tortas, Shukos, Tacos y Pollo con Papas en Silver Spring, MD",
+      "description": "Tortas, shukos, tacos y pollo con papas hechos al momento en Silver Spring y Hyattsville, Maryland."
+    },
+    "menu": {
+      "title": "Menú | Tortas El Chapín, Silver Spring y Hyattsville, MD",
+      "description": "Mira el menú de Tortas El Chapín con tortas, shukos, tacos y pollo con papas."
+    },
+    "order": {
+      "title": "Ordenar para Recoger | Tortas El Chapín Silver Spring",
+      "description": "Ordena para recoger en Tortas El Chapín, 701 University Blvd E en Silver Spring."
+    },
+    "thanks": {
+      "title": "Orden Recibida | Tortas El Chapín",
+      "description": "Información para recoger una orden de Tortas El Chapín."
+    },
+    "error": {
+      "title": "Problema con la Orden | Tortas El Chapín",
+      "description": "Intenta pagar de nuevo o llama a Tortas El Chapín."
+    },
+    "locations": {
+      "title": "Ubicaciones | Tortas El Chapín en Maryland",
+      "description": "Encuentra Tortas El Chapín en Silver Spring y Hyattsville, Maryland."
+    },
+    "silverSpring": {
+      "title": "Tortas El Chapín Silver Spring | 701 University Blvd E | Horario e Indicaciones",
+      "description": "Horario, indicaciones y pedidos para recoger en Tortas El Chapín en Silver Spring, Maryland."
+    },
+    "hyattsville": {
+      "title": "Tortas El Chapín Hyattsville | 1410 Merrimac Dr | Horario e Indicaciones",
+      "description": "Horario, indicaciones y teléfono de Tortas El Chapín en Hyattsville, Maryland."
+    },
+    "about": {
+      "title": "Nosotros | Tortas El Chapín",
+      "description": "Conoce el negocio familiar de Tortas El Chapín en Maryland."
+    },
+    "contact": {
+      "title": "Contacto | Tortas El Chapín",
+      "description": "Llama a Tortas El Chapín o encuentra las direcciones y horarios de los dos locales."
+    },
+    "notFound": {
+      "title": "Página No Encontrada | Tortas El Chapín",
+      "description": "Encuentra el inicio o el menú de Tortas El Chapín."
+    }
+  }
+}

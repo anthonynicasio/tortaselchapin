@@ -1,0 +1,125 @@
+---
+import { business, formatAddress, getLocation } from '../../data/business';
+import { localizedPath, t, type Locale } from '../../i18n/utils';
+import Base from '../../layouts/Base.astro';
+import { breadcrumbSchema, webPageSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const pickupLocation = getLocation('silver-spring');
+const graph = [
+  webPageSchema(
+    locale,
+    '/order/thanks',
+    t(locale, 'seo.thanks.title'),
+    t(locale, 'seo.thanks.description'),
+  ),
+  breadcrumbSchema(locale, [
+    { name: t(locale, 'breadcrumbs.order'), path: '/order' },
+    { name: t(locale, 'thanks.title'), path: '/order/thanks' },
+  ]),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, 'seo.thanks.title')}
+  description={t(locale, 'seo.thanks.description')}
+  canonicalPath="/order/thanks"
+  jsonLdGraph={graph}
+>
+  <main id="main-content" class="section">
+    <div class="container">
+      <section class="thanks-card">
+        <p class="eyebrow">{t(locale, 'thanks.title')}</p>
+        <h1
+          data-thanks-heading
+          data-template={t(locale, 'thanks.heading')}
+          data-fallback={t(locale, 'thanks.headingFallback')}
+        >
+          {t(locale, 'thanks.headingFallback')}
+        </h1>
+        <p>{t(locale, 'thanks.body')}</p>
+
+        <div class="pickup-details">
+          <h2>{t(locale, 'thanks.hoursHeading')}</h2>
+          <address>{formatAddress(pickupLocation)}</address>
+          <ul>
+            <li>{t(locale, 'hours.mondayToThursday')}: {t(locale, 'hours.mondayToThursdayValue')}</li>
+            <li>{t(locale, 'hours.friday')}: {t(locale, 'hours.fridayValue')}</li>
+            <li>{t(locale, 'hours.saturdayAndSunday')}: {t(locale, 'hours.weekendValue')}</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <a class="button" href={business.phoneHref}>{t(locale, 'thanks.call')}</a>
+          <a class="button button--secondary" href={localizedPath(locale, '/')}>
+            {t(locale, 'thanks.home')}
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+<script>
+  import { clear } from '../../lib/cart';
+
+  clear();
+
+  const heading = document.querySelector<HTMLElement>('[data-thanks-heading]');
+  if (heading) {
+    const name = new URLSearchParams(window.location.search).get('name')?.trim() ?? '';
+    const safeName = name.slice(0, 60);
+    heading.textContent = safeName
+      ? (heading.dataset.template ?? '').replace('{name}', safeName)
+      : heading.dataset.fallback ?? '';
+  }
+</script>
+</Base>
+
+<style>
+  .thanks-card {
+    max-width: 760px;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    box-shadow: var(--shadow);
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+    font-size: clamp(2.6rem, 9vw, 5rem);
+  }
+
+  .thanks-card > p:not(.eyebrow) {
+    color: var(--color-muted);
+    font-size: 1.05rem;
+  }
+
+  .pickup-details {
+    padding-block: 1.3rem;
+    margin-block: 1.5rem;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .pickup-details h2 {
+    margin-bottom: 0.7rem;
+    font-size: 1.45rem;
+  }
+
+  ul {
+    padding-left: 1.1rem;
+    margin-bottom: 0;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+</style>

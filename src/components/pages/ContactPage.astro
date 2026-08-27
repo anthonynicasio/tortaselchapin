@@ -1,0 +1,172 @@
+---
+import Breadcrumbs from '../Breadcrumbs.astro';
+import {
+  business,
+  formatAddress,
+  getLocation,
+} from '../../data/business';
+import { t, type Locale } from '../../i18n/utils';
+import Base from '../../layouts/Base.astro';
+import { breadcrumbSchema, organizationSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const silverSpring = getLocation('silver-spring');
+const hyattsville = getLocation('hyattsville');
+const graph = [
+  organizationSchema(locale),
+  breadcrumbSchema(locale, [
+    { name: t(locale, 'breadcrumbs.contact'), path: '/contact' },
+  ]),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, 'seo.contact.title')}
+  description={t(locale, 'seo.contact.description')}
+  canonicalPath="/contact"
+  jsonLdGraph={graph}
+>
+  <main id="main-content">
+    <div class="container">
+      <Breadcrumbs
+        locale={locale}
+        items={[{ label: t(locale, 'breadcrumbs.contact') }]}
+      />
+    </div>
+
+    <section class="section contact-page">
+      <div class="container">
+        <div class="section-heading">
+          <h1>{t(locale, 'contact.heading')}</h1>
+          <p>{t(locale, 'contact.intro')}</p>
+        </div>
+
+        <div class="contact-grid">
+          <article>
+            <h2>{t(locale, 'contact.phone')}</h2>
+            <a class="contact-link" href={business.phoneHref}>{business.phoneDisplay}</a>
+            <p>{t(locale, 'contact.catering')}</p>
+          </article>
+
+          <article>
+            <h2>{t(locale, 'contact.addresses')}</h2>
+            <address>
+              <strong>{silverSpring.name}</strong>
+              <span>{formatAddress(silverSpring)}</span>
+            </address>
+            <address>
+              <strong>{hyattsville.name}</strong>
+              <span>{formatAddress(hyattsville)}</span>
+            </address>
+            <!-- [VERIFY: Confirm the Hyattsville street number before launch.] -->
+          </article>
+
+          <article>
+            <h2>{t(locale, 'contact.hours')}</h2>
+            <ul>
+              <li>{t(locale, 'hours.mondayToThursday')}: {t(locale, 'hours.mondayToThursdayValue')}</li>
+              <li>{t(locale, 'hours.friday')}: {t(locale, 'hours.fridayValue')}</li>
+              <li>{t(locale, 'hours.saturdayAndSunday')}: {t(locale, 'hours.weekendValue')}</li>
+            </ul>
+          </article>
+
+          <article>
+            <h2>{t(locale, 'contact.social')}</h2>
+            <ul>
+              <li>
+                <a href={business.social.tiktok.url} target="_blank" rel="noreferrer">
+                  {t(locale, 'footer.tiktok')}
+                </a>
+              </li>
+              <li>
+                <span>{t(locale, 'footer.facebook')}</span>
+                <!-- [PLACEHOLDER: Add the confirmed Facebook URL.] -->
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .contact-page {
+    padding-top: clamp(2rem, 5vw, 4rem);
+  }
+
+  h1 {
+    margin-bottom: 0.8rem;
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
+  }
+
+  .section-heading p {
+    color: var(--color-muted);
+    font-size: 1.05rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  article {
+    padding: 1.4rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    box-shadow: var(--shadow);
+  }
+
+  article h2 {
+    margin-bottom: 0.8rem;
+    font-size: 1.35rem;
+  }
+
+  article p {
+    margin: 0.7rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .contact-link {
+    color: var(--color-red-dark);
+    font-family: var(--font-heading);
+    font-size: 1.55rem;
+    font-weight: 700;
+  }
+
+  address {
+    display: grid;
+    gap: 0.15rem;
+    margin-bottom: 1rem;
+  }
+
+  address:last-of-type {
+    margin-bottom: 0;
+  }
+
+  address span {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 720px) {
+    .contact-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

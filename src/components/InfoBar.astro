@@ -1,0 +1,219 @@
+---
+import { business, getLocation } from '../data/business';
+import { t, type Locale } from '../i18n/utils';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const location = getLocation(business.orderingLocationId);
+---
+
+<div
+  class="info-bar card"
+  data-today-bar
+  data-weekday={t(locale, 'infoBar.weekdayValue')}
+  data-friday={t(locale, 'infoBar.fridayValue')}
+  data-weekend={t(locale, 'infoBar.weekendValue')}
+>
+  <div class="info-bar__col">
+    <svg
+      class="info-bar__icon"
+      viewBox="0 0 36 36"
+      width="36"
+      height="36"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="18" cy="18" r="14" />
+      <path d="M18 10.5V18l5.5 3.5" />
+    </svg>
+    <div>
+      <p class="eyebrow info-bar__eyebrow">{t(locale, 'infoBar.today')}</p>
+      <p class="info-bar__value" hidden>
+        <span class="underline-gold" data-today-value></span>
+      </p>
+      <ul class="info-bar__hours" data-today-fallback>
+        <li>{t(locale, 'hours.mondayToThursday')}: {t(locale, 'hours.mondayToThursdayValue')}</li>
+        <li>{t(locale, 'hours.friday')}: {t(locale, 'hours.fridayValue')}</li>
+        <li>{t(locale, 'hours.saturdayAndSunday')}: {t(locale, 'hours.weekendValue')}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-bar__col">
+    <svg
+      class="info-bar__icon"
+      viewBox="0 0 36 36"
+      width="36"
+      height="36"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 33c-6.8-6.6-10.5-11.7-10.5-16.5a10.5 10.5 0 1 1 21 0C28.5 21.3 24.8 26.4 18 33Z" />
+      <circle cx="18" cy="15.5" r="3.5" />
+    </svg>
+    <div>
+      <p class="info-bar__title">{location.name}</p>
+      <p class="info-bar__address">
+        {location.street}<br />
+        {location.city}, {location.state} {location.postalCode}
+      </p>
+    </div>
+  </div>
+
+  <div class="info-bar__col">
+    <svg
+      class="info-bar__icon"
+      viewBox="0 0 36 36"
+      width="36"
+      height="36"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M31 25.4v4.2a2.8 2.8 0 0 1-3.1 2.8 28 28 0 0 1-12.2-4.3 27.4 27.4 0 0 1-8.5-8.5A28 28 0 0 1 2.9 7.3 2.8 2.8 0 0 1 5.7 4.2h4.2a2.8 2.8 0 0 1 2.8 2.4c.2 1.4.5 2.7 1 4a2.8 2.8 0 0 1-.6 2.9l-1.8 1.8a22.4 22.4 0 0 0 8.5 8.5l1.8-1.8a2.8 2.8 0 0 1 2.9-.6c1.3.5 2.6.8 4 1a2.8 2.8 0 0 1 2.5 2.9Z" />
+    </svg>
+    <div>
+      <p class="eyebrow info-bar__eyebrow">{t(locale, 'header.callToOrder')}</p>
+      <a class="info-bar__phone underline-gold" href={business.phoneHref}>
+        {business.phoneDisplay}
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  for (const bar of document.querySelectorAll<HTMLElement>('[data-today-bar]')) {
+    const day = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      weekday: 'short',
+    })
+      .format(new Date())
+      .toLowerCase();
+    const key = day === 'fri' ? 'friday' : day === 'sat' || day === 'sun' ? 'weekend' : 'weekday';
+    const text = bar.dataset[key];
+    const value = bar.querySelector<HTMLElement>('[data-today-value]');
+    const fallback = bar.querySelector<HTMLElement>('[data-today-fallback]');
+    if (!text || !value || !value.parentElement) continue;
+    value.textContent = text;
+    value.parentElement.hidden = false;
+    if (fallback) fallback.hidden = true;
+  }
+</script>
+
+<style>
+  .info-bar {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    padding: 20px 24px;
+  }
+
+  .info-bar__col {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-block: 14px;
+  }
+
+  .info-bar__col + .info-bar__col {
+    border-top: 1px solid rgb(27 27 27 / 15%);
+  }
+
+  .info-bar__icon {
+    flex: 0 0 auto;
+    color: var(--red);
+  }
+
+  .info-bar__eyebrow {
+    margin-bottom: 2px;
+  }
+
+  .info-bar__value {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .info-bar__value[hidden] {
+    display: none;
+  }
+
+  .info-bar__hours {
+    display: grid;
+    gap: 2px;
+    padding: 0;
+    margin: 0;
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.4;
+    list-style: none;
+  }
+
+  .info-bar__hours[hidden] {
+    display: none;
+  }
+
+  .info-bar__title {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .info-bar__address {
+    margin: 0;
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .info-bar__phone {
+    display: inline-block;
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  @media (min-width: 900px) {
+    .info-bar {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      padding: 22px 32px;
+    }
+
+    .info-bar__col {
+      padding-block: 6px;
+      padding-inline: 24px;
+    }
+
+    .info-bar__col:first-child {
+      padding-left: 0;
+    }
+
+    .info-bar__col + .info-bar__col {
+      border-top: 0;
+      border-left: 1px solid rgb(27 27 27 / 15%);
+    }
+  }
+</style>

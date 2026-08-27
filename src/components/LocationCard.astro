@@ -1,0 +1,138 @@
+---
+import {
+  business,
+  formatAddress,
+  getLocation,
+  type LocationId,
+} from '../data/business';
+import { localizedPath, t, type Locale } from '../i18n/utils';
+
+export interface Props {
+  locale: Locale;
+  locationId: LocationId;
+  showDetail?: boolean;
+}
+
+const {
+  locale,
+  locationId,
+  showDetail = true,
+} = Astro.props;
+const location = getLocation(locationId);
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  formatAddress(location),
+)}`;
+const detailPath = `/locations/${locationId}`;
+---
+
+<article class="location-card card">
+  <div class="location-card__top">
+    <div>
+      <p class="eyebrow">
+        {location.ordering ? t(locale, 'locations.orderingLocation') : t(locale, 'locations.callAhead')}
+      </p>
+      <h3>{location.name}</h3>
+    </div>
+  </div>
+
+  <dl>
+    <div>
+      <dt>{t(locale, 'locations.address')}</dt>
+      <dd>
+        <address>{formatAddress(location)}</address>
+        {
+          locationId === 'hyattsville' && (
+            <Fragment set:html="<!-- [VERIFY: Confirm the Hyattsville street number before launch.] -->" />
+          )
+        }
+      </dd>
+    </div>
+    <div>
+      <dt>{t(locale, 'locations.phone')}</dt>
+      <dd><a href={business.phoneHref}>{business.phoneDisplay}</a></dd>
+    </div>
+    <div>
+      <dt>{t(locale, 'locations.hours')}</dt>
+      <dd class="hours">
+        <span>{t(locale, 'hours.mondayToThursday')}: {t(locale, 'hours.mondayToThursdayValue')}</span>
+        <span>{t(locale, 'hours.friday')}: {t(locale, 'hours.fridayValue')}</span>
+        <span>{t(locale, 'hours.saturdayAndSunday')}: {t(locale, 'hours.weekendValue')}</span>
+      </dd>
+    </div>
+  </dl>
+
+  <div class="location-card__actions">
+    <a class="button" href={directionsUrl} target="_blank" rel="noreferrer">
+      {t(locale, 'locations.directions')}
+    </a>
+    {
+      showDetail && (
+        <a class="button button--secondary" href={localizedPath(locale, detailPath)}>
+          {t(locale, 'locations.viewLocation')}
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .location-card {
+    display: grid;
+    align-content: space-between;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.35rem;
+  }
+
+  h3 {
+    margin-bottom: 0;
+    font-size: 28px;
+  }
+
+  dl {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+  }
+
+  dt {
+    margin-bottom: 0.15rem;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--ink);
+    font-size: 15px;
+  }
+
+  dd a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .hours {
+    display: grid;
+    font-size: 15px;
+  }
+
+  .location-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4%;
+    row-gap: 0.7rem;
+  }
+
+  .location-card__actions .button {
+    min-height: 44px;
+    flex: 1 1 48%;
+  }
+</style>

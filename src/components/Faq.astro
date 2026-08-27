@@ -1,0 +1,75 @@
+---
+import { t, type Locale } from '../i18n/utils';
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+  marker?: 'parking' | 'delivery';
+};
+
+export interface Props {
+  locale: Locale;
+  items: FaqItem[];
+}
+
+const { locale, items } = Astro.props;
+---
+
+<section class="faq" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">{t(locale, 'faq.heading')}</h2>
+  <div class="faq__list">
+    {
+      items.map((item) => (
+        <article>
+          <h3>{item.question}</h3>
+          <p>{item.answer}</p>
+          {item.marker === 'parking' && (
+            <Fragment set:html="<!-- [PLACEHOLDER: Add verified parking details.] -->" />
+          )}
+          {item.marker === 'delivery' && (
+            <Fragment set:html="<!-- [VERIFY: Confirm third-party delivery availability.] -->" />
+          )}
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq {
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .faq__list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  article {
+    padding: 1.3rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-white);
+  }
+
+  h3 {
+    margin-bottom: 0.45rem;
+    font-size: 1.15rem;
+    text-transform: none;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 780px) {
+    .faq__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

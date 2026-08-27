@@ -1,0 +1,132 @@
+---
+import {
+  business,
+  formatAddress,
+  getLocation,
+  type LocationId,
+} from '../data/business';
+import { localizedPath, t, type Locale } from '../i18n/utils';
+
+export interface Props {
+  locale: Locale;
+  orderingEnabled: boolean;
+  locationId?: LocationId;
+}
+
+const {
+  locale,
+  orderingEnabled,
+  locationId = 'silver-spring',
+} = Astro.props;
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  formatAddress(getLocation(locationId)),
+)}`;
+const orderUrl = orderingEnabled
+  ? localizedPath(locale, '/order')
+  : business.phoneHref;
+---
+
+<nav class="sticky-bar" aria-label={t(locale, 'a11y.quickActions')}>
+  <a href={business.phoneHref}>
+    <span aria-hidden="true">☎</span>
+    <span>{t(locale, 'stickyBar.call')}</span>
+  </a>
+  <a href={directionsUrl} target="_blank" rel="noreferrer">
+    <span aria-hidden="true">⌖</span>
+    <span>{t(locale, 'stickyBar.directions')}</span>
+  </a>
+  <a href={orderUrl}>
+    <span aria-hidden="true">+</span>
+    <span>{t(locale, 'stickyBar.order')}</span>
+    {
+      orderingEnabled && (
+        <span
+          class="cart-count"
+          data-cart-count
+          aria-label={t(locale, 'a11y.cartCount')}
+          hidden
+        >
+          0
+        </span>
+      )
+    }
+  </a>
+</nav>
+
+<script>
+  import { cart } from '../lib/cart';
+
+  const updateCartCounts = () => {
+    const count = cart.get().reduce((total, item) => total + item.qty, 0);
+
+    for (const badge of document.querySelectorAll<HTMLElement>('[data-cart-count]')) {
+      badge.textContent = String(count);
+      badge.hidden = count === 0;
+    }
+  };
+
+  cart.subscribe(updateCartCounts);
+</script>
+
+<style>
+  .sticky-bar {
+    position: fixed;
+    z-index: 50;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 0 env(safe-area-inset-bottom);
+    border-top: 1px solid rgb(255 255 255 / 18%);
+    background: var(--color-ink);
+    box-shadow: 0 -8px 24px rgb(27 27 27 / 20%);
+  }
+
+  a {
+    position: relative;
+    display: flex;
+    min-height: 68px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
+    padding: 0.45rem;
+    border-right: 1px solid rgb(255 255 255 / 16%);
+    color: var(--color-white);
+    font-size: 0.76rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  a:last-child {
+    border-right: 0;
+    background: var(--color-red);
+  }
+
+  a > span[aria-hidden] {
+    font-size: 1rem;
+  }
+
+  .cart-count {
+    display: grid;
+    min-width: 20px;
+    height: 20px;
+    padding-inline: 0.3rem;
+    border-radius: 999px;
+    place-items: center;
+    color: var(--color-ink);
+    background: var(--color-gold);
+    font-size: 0.68rem;
+  }
+
+  .cart-count[hidden] {
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .sticky-bar {
+      display: none;
+    }
+  }
+</style>

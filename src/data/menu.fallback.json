@@ -1,0 +1,71 @@
+[
+  {
+    "id": "torta-mixta",
+    "catalogObjectId": "",
+    "variationId": "",
+    "category": "tortas",
+    "name": {
+      "en": "Torta Mixta",
+      "es": "Torta Mixta"
+    },
+    "description": {
+      "en": "A toasted telera loaded with mixed meats, beans, avocado, lettuce, tomato, mayo, and jalapeño.",
+      "es": "Telera tostada con carnes mixtas, frijoles, aguacate, lechuga, tomate, mayonesa y jalapeño."
+    },
+    "priceCents": 0,
+    "currency": "USD",
+    "popular": true,
+    "available": true
+  },
+  {
+    "id": "shuko-clasico",
+    "catalogObjectId": "",
+    "variationId": "",
+    "category": "shukos",
+    "name": {
+      "en": "Shuko Clásico",
+      "es": "Shuko Clásico"
+    },
+    "description": {
+      "en": "A grilled bun loaded with sausage, guacamole, cabbage, mayo, mustard, and hot sauce.",
+      "es": "Pan tostado, salchicha, guacamole, repollo, mayonesa, mostaza y salsa picante."
+    },
+    "priceCents": 0,
+    "currency": "USD",
+    "available": true
+  },
+  {
+    "id": "tacos",
+    "catalogObjectId": "",
+    "variationId": "",
+    "category": "tacos",
+    "name": {
+      "en": "Tacos",
+      "es": "Tacos"
+    },
+    "description": {
+      "en": "Three corn tortilla tacos with onion, cilantro, and lime. Pick your meat.",
+      "es": "Tres tacos en tortilla de maíz con cebolla, cilantro y limón. Escoge tu carne."
+    },
+    "priceCents": 0,
+    "currency": "USD",
+    "available": true
+  },
+  {
+    "id": "pollo-con-papas",
+    "catalogObjectId": "",
+    "variationId": "",
+    "category": "pollo-con-papas",
+    "name": {
+      "en": "Pollo con Papas",
+      "es": "Pollo con Papas"
+    },
+    "description": {
+      "en": "Crispy fried chicken with seasoned fries and our house sauce.",
+      "es": "Pollo frito crujiente con papas y salsa de la casa."
+    },
+    "priceCents": 0,
+    "currency": "USD",
+    "available": true
+  }
+]

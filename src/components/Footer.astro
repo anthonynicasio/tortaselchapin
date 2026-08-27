@@ -1,0 +1,233 @@
+---
+import { Image } from 'astro:assets';
+
+import brandWordmark from '../assets/brand-wordmark.png';
+import { business, getNap } from '../data/business';
+import { localizedPath, t, type Locale } from '../i18n/utils';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const navItems = [
+  { key: 'header.menu', path: '/menu' },
+  { key: 'header.locations', path: '/locations' },
+  { key: 'header.about', path: '/about' },
+  { key: 'header.contact', path: '/contact' },
+];
+const otherLocale: Locale = locale === 'en' ? 'es' : 'en';
+const languageLabel =
+  locale === 'en' ? t(locale, 'header.spanish') : t(locale, 'header.english');
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a
+        class="footer-logo"
+        href={localizedPath(locale, '/')}
+        aria-label={`${business.name} - ${t(locale, 'header.home')}`}
+      >
+        <Image
+          src={brandWordmark}
+          width={520}
+          alt=""
+          format="webp"
+          quality={82}
+        />
+      </a>
+      <p class="footer-tagline">{t(locale, 'footer.tagline')}</p>
+    </div>
+
+    <nav aria-label={t(locale, 'a11y.footerNavigation')}>
+      <h2>{t(locale, 'footer.navigation')}</h2>
+      <ul>
+        {
+          navItems.map((item) => (
+            <li><a href={localizedPath(locale, item.path)}>{t(locale, item.key)}</a></li>
+          ))
+        }
+        <li>
+          <a
+            href={localizedPath(otherLocale, '/')}
+            hreflang={otherLocale}
+            lang={otherLocale}
+          >
+            {languageLabel}
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2>{t(locale, 'footer.locations')}</h2>
+      <address>
+        <a href={localizedPath(locale, '/locations/silver-spring')}>
+          {getNap('silver-spring')}
+        </a>
+      </address>
+      <address>
+        <a href={localizedPath(locale, '/locations/hyattsville')}>
+          {getNap('hyattsville')}
+        </a>
+      </address>
+      <!-- [VERIFY: Confirm the Hyattsville street number before launch.] -->
+    </div>
+
+    <div>
+      <h2>{t(locale, 'footer.hours')}</h2>
+      <ul class="hours-list">
+        <li>
+          <span>{t(locale, 'hours.mondayToThursday')}</span>
+          <span>{t(locale, 'hours.mondayToThursdayValue')}</span>
+        </li>
+        <li>
+          <span>{t(locale, 'hours.friday')}</span>
+          <span>{t(locale, 'hours.fridayValue')}</span>
+        </li>
+        <li>
+          <span>{t(locale, 'hours.saturdayAndSunday')}</span>
+          <span>{t(locale, 'hours.weekendValue')}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>{t(locale, 'footer.follow')}</h2>
+      <ul>
+        <li>
+          <a href={business.social.tiktok.url} target="_blank" rel="noreferrer">
+            {t(locale, 'footer.tiktok')}
+            <span class="sr-only">, {t(locale, 'a11y.externalLink')}</span>
+          </a>
+        </li>
+        <li>
+          <span>{t(locale, 'footer.facebook')}</span>
+          <!-- [PLACEHOLDER: Add the confirmed Facebook URL.] -->
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>&copy; {new Date().getFullYear()} {business.name}. {t(locale, 'footer.copyright')}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: clamp(40px, 6vw, 56px) 20px;
+    color: rgb(255 255 255 / 85%);
+    background: var(--ink);
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 2rem 2.5rem;
+  }
+
+  .footer-brand {
+    max-width: 300px;
+  }
+
+  .footer-logo {
+    display: block;
+    width: fit-content;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-logo :global(img) {
+    width: auto;
+    height: 68px;
+  }
+
+  .footer-tagline {
+    font-size: 13px;
+  }
+
+  h2 {
+    margin-bottom: 0.85rem;
+    color: var(--paper);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  a {
+    color: var(--paper);
+    font-size: 14px;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .footer-logo {
+    text-decoration: none;
+  }
+
+  ul:not(.hours-list) span {
+    font-size: 14px;
+  }
+
+  address {
+    margin-bottom: 0.85rem;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .hours-list li {
+    display: grid;
+    gap: 0.05rem;
+    font-size: 14px;
+  }
+
+  .hours-list li span:first-child {
+    color: var(--paper);
+    font-weight: 700;
+  }
+
+  .footer-bottom {
+    padding-top: 1.25rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid rgb(255 255 255 / 15%);
+    font-size: 12px;
+  }
+
+  @media (min-width: 480px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .footer-grid {
+      grid-template-columns: 1.3fr 0.8fr 1.5fr 1fr 0.7fr;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      grid-column: auto;
+    }
+
+    .footer-logo :global(img) {
+      height: 88px;
+    }
+  }
+</style>

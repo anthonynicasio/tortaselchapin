@@ -1,0 +1,168 @@
+---
+import { t, type Locale } from '../i18n/utils';
+import type { MenuItem as MenuItemData } from '../lib/catalog';
+import DishPhoto from './DishPhoto.astro';
+
+export interface Props {
+  locale: Locale;
+  item: MenuItemData;
+  orderingEnabled: boolean;
+}
+
+const { locale, item, orderingEnabled } = Astro.props;
+const hasPrice = Number.isInteger(item.priceCents) && item.priceCents > 0;
+const canAdd =
+  orderingEnabled &&
+  item.available &&
+  item.variationId.trim().length > 0 &&
+  hasPrice;
+const price = hasPrice
+  ? new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(item.priceCents / 100)
+  : t(locale, 'menu.pricePending');
+---
+
+<article class:list={['menu-item', { 'menu-item--unavailable': !item.available }]}>
+  <DishPhoto
+    alt={item.name[locale]}
+    item={item}
+    variant="thumbnail"
+  />
+
+  <div class="menu-item__copy">
+    <div class="menu-item__heading">
+      <h3>{item.name[locale]}</h3>
+      {item.popular && <span class="badge">{t(locale, 'menu.mostPopular')}</span>}
+    </div>
+    {item.description[locale] && <p>{item.description[locale]}</p>}
+    {!item.available && <span class="unavailable">{t(locale, 'menu.unavailable')}</span>}
+  </div>
+
+  <div class="menu-item__action">
+    <span class="price">{price}</span>
+    {
+      !hasPrice && (
+        <Fragment set:html="<!-- [PLACEHOLDER: Add the verified menu price from Square.] -->" />
+      )
+    }
+    {
+      canAdd && (
+        <button
+          class="button"
+          type="button"
+          data-add
+          data-variation-id={item.variationId}
+          data-item-name={item.name[locale]}
+          data-price-cents={String(item.priceCents)}
+          data-default-label={t(locale, 'menu.add')}
+          data-added-label={t(locale, 'menu.added')}
+          aria-label={`${t(locale, 'menu.addToCart')}: ${item.name[locale]}`}
+        >
+          {t(locale, 'menu.add')}
+        </button>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .menu-item {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1.35rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .menu-item:first-child {
+    padding-top: 0;
+  }
+
+  .menu-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .menu-item__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  h3 {
+    margin-bottom: 0;
+    font-size: 1.45rem;
+    text-transform: none;
+  }
+
+  p {
+    max-width: 680px;
+    margin: 0.45rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.92rem;
+  }
+
+  .badge,
+  .unavailable {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 26px;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .badge {
+    color: var(--color-ink);
+    background: var(--color-gold);
+  }
+
+  .unavailable {
+    margin-top: 0.65rem;
+    color: var(--color-muted);
+    background: var(--color-line);
+  }
+
+  .menu-item__action {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .price {
+    color: var(--color-red-dark);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .button {
+    min-width: 84px;
+  }
+
+  .menu-item--unavailable {
+    filter: grayscale(1);
+    opacity: 0.58;
+  }
+
+  @media (min-width: 680px) {
+    .menu-item {
+      grid-template-columns: 112px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .menu-item__action {
+      grid-column: auto;
+      justify-content: flex-end;
+    }
+  }
+</style>

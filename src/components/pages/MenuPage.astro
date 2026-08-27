@@ -1,0 +1,198 @@
+---
+import { getCollection } from 'astro:content';
+
+import Breadcrumbs from '../Breadcrumbs.astro';
+import MenuSection from '../MenuSection.astro';
+import { t, type Locale } from '../../i18n/utils';
+import type { MenuItem, SiteMenuSection } from '../../lib/catalog';
+import { isOrderingEnabled } from '../../lib/square';
+import Base from '../../layouts/Base.astro';
+import { breadcrumbSchema, menuSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const orderingEnabled = isOrderingEnabled();
+const entries = await getCollection('menu');
+const menuItems = entries.map((entry) => entry.data) as MenuItem[];
+const sectionIds: SiteMenuSection[] = [
+  'tortas',
+  'shukos',
+  'tacos',
+  'pollo-con-papas',
+  'bebidas',
+];
+const sections = sectionIds.map((id) => ({
+  id,
+  items: menuItems.filter((item) => item.category === id),
+}));
+const graph = [
+  menuSchema(locale, sections),
+  breadcrumbSchema(locale, [
+    { name: t(locale, 'breadcrumbs.menu'), path: '/menu' },
+  ]),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, 'seo.menu.title')}
+  description={t(locale, 'seo.menu.description')}
+  canonicalPath="/menu"
+  jsonLdGraph={graph}
+>
+  <main id="main-content">
+    <div class="container">
+      <Breadcrumbs
+        locale={locale}
+        items={[{ label: t(locale, 'breadcrumbs.menu') }]}
+      />
+    </div>
+
+    <header class="menu-hero">
+      <div class="container">
+        <h1>{t(locale, 'menu.heading')}</h1>
+        <p>{t(locale, 'menu.intro')}</p>
+        {!orderingEnabled && <p class="ordering-note">{t(locale, 'menu.orderingUnavailable')}</p>}
+      </div>
+    </header>
+
+    <nav class="section-nav" aria-label={t(locale, 'a11y.menuSections')}>
+      <div class="container section-nav__inner">
+        {
+          sections.map((section) => (
+            <a href={`#menu-${section.id}`}>
+              {t(locale, `menu.categories.${section.id}`)}
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+
+    <div class="container menu-sections">
+      {
+        sections.map((section) => (
+          <MenuSection
+            locale={locale}
+            sectionId={`menu-${section.id}`}
+            heading={t(locale, `menu.categories.${section.id}`)}
+            items={section.items}
+            orderingEnabled={orderingEnabled}
+          />
+        ))
+      }
+    </div>
+  </main>
+
+  <script>
+    import { addItem } from '../../lib/cart';
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const button = event.target.closest<HTMLButtonElement>('[data-add]');
+      if (!button || button.disabled) return;
+
+      const variationId = button.dataset.variationId?.trim() ?? '';
+      const name = button.dataset.itemName?.trim() ?? '';
+      const priceCents = Number(button.dataset.priceCents);
+
+      if (!variationId || !name || !Number.isSafeInteger(priceCents) || priceCents <= 0) {
+        return;
+      }
+
+      // Client price is display-only. The checkout API sends catalog IDs to Square.
+      addItem({ variationId, name, priceCents });
+      button.textContent = button.dataset.addedLabel ?? '';
+      button.disabled = true;
+
+      window.setTimeout(() => {
+        button.textContent = button.dataset.defaultLabel ?? '';
+        button.disabled = false;
+      }, 1000);
+    });
+  </script>
+</Base>
+
+<style>
+  .menu-hero {
+    padding-block: clamp(2.5rem, 7vw, 5rem);
+    color: var(--color-white);
+    background: var(--color-ink);
+  }
+
+  .menu-hero h1 {
+    margin-bottom: 0.8rem;
+    color: var(--color-white);
+  }
+
+  .menu-hero p {
+    max-width: 680px;
+    margin-bottom: 0;
+    color: rgb(255 255 255 / 80%);
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+  }
+
+  .menu-hero .ordering-note {
+    width: fit-content;
+    padding: 0.5rem 0.7rem;
+    margin-top: 1rem;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: var(--radius);
+    color: var(--color-white);
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+
+  .section-nav {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-white);
+    box-shadow: 0 4px 16px rgb(27 27 27 / 8%);
+  }
+
+  .section-nav__inner {
+    display: flex;
+    gap: 0.35rem;
+    padding-block: 0.45rem;
+  }
+
+  .section-nav a {
+    display: inline-flex;
+    min-height: 44px;
+    flex: 0 0 auto;
+    align-items: center;
+    padding-inline: 0.8rem;
+    border-radius: var(--radius);
+    color: var(--color-ink);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .section-nav a:hover {
+    color: var(--color-white);
+    background: var(--color-red);
+  }
+
+  .menu-sections {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: clamp(2rem, 7vw, 5rem);
+  }
+
+  @media (min-width: 900px) {
+    .section-nav {
+      position: static;
+    }
+
+    .section-nav__inner {
+      justify-content: center;
+    }
+  }
+</style>

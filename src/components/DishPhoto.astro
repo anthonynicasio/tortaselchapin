@@ -1,0 +1,156 @@
+---
+import { Picture } from 'astro:assets';
+
+import placeholder from '../assets/photo-placeholder.png';
+import polloConPapas from '../assets/pollo-con-papas.jpg';
+import shukoClasico from '../assets/shuko-clasico.jpg';
+import tacosDeAsada from '../assets/tacos-de-asada.jpg';
+import tortaMixta from '../assets/torta-mixta.png';
+import type { MenuItem } from '../lib/catalog';
+
+type PhotoKey =
+  | 'torta-mixta'
+  | 'shuko-clasico'
+  | 'tacos-de-asada'
+  | 'pollo-con-papas';
+
+export interface Props {
+  alt: string;
+  item?: MenuItem;
+  photoKey?: PhotoKey;
+  variant?: 'hero' | 'card' | 'thumbnail';
+  eager?: boolean;
+  class?: string;
+}
+
+const {
+  alt,
+  item,
+  photoKey,
+  variant = 'card',
+  eager = false,
+  class: className,
+} = Astro.props;
+
+const photos = {
+  'torta-mixta': tortaMixta,
+  'shuko-clasico': shukoClasico,
+  'tacos-de-asada': tacosDeAsada,
+  'pollo-con-papas': polloConPapas,
+};
+
+function normalize(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function photoKeyForItem(menuItem: MenuItem | undefined): PhotoKey | undefined {
+  if (!menuItem) return undefined;
+
+  const id = normalize(menuItem.id);
+  const name = normalize(menuItem.name.en);
+
+  if (id === 'torta-mixta' || name === 'torta-mixta') return 'torta-mixta';
+  if (id === 'shuko-clasico' || name === 'shuko-clasico') return 'shuko-clasico';
+  if (id === 'tacos' || name === 'tacos' || name === 'tacos-de-asada') {
+    return 'tacos-de-asada';
+  }
+  if (id === 'pollo-con-papas' || name === 'pollo-con-papas') {
+    return 'pollo-con-papas';
+  }
+
+  return undefined;
+}
+
+const resolvedKey = photoKey ?? photoKeyForItem(item);
+const localPhoto = resolvedKey ? photos[resolvedKey] : undefined;
+const fallbackPhoto = localPhoto ?? placeholder;
+const remoteUrl = !localPhoto ? item?.imageUrl : undefined;
+const targetWidth = Math.min(
+  fallbackPhoto.width,
+  variant === 'hero' ? 960 : variant === 'card' ? 560 : 320,
+);
+const targetHeight = Math.round(
+  fallbackPhoto.height * (targetWidth / fallbackPhoto.width),
+);
+---
+
+<div
+  class:list={[
+    'dish-photo',
+    `dish-photo--${variant}`,
+    resolvedKey && `dish-photo--${resolvedKey}`,
+    className,
+  ]}
+>
+  {
+    remoteUrl ? (
+      <img
+        src={remoteUrl}
+        width="800"
+        height="600"
+        alt={alt}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    ) : (
+      <Picture
+        src={fallbackPhoto}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpeg"
+        width={targetWidth}
+        height={targetHeight}
+        alt={localPhoto ? alt : ''}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        quality={80}
+      />
+    )
+  }
+</div>
+
+<style>
+  .dish-photo {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius);
+    background: var(--color-line);
+  }
+
+  .dish-photo :global(picture),
+  .dish-photo :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .dish-photo :global(img) {
+    object-fit: cover;
+  }
+
+  .dish-photo--hero {
+    box-shadow: 0 20px 45px rgb(0 0 0 / 28%);
+  }
+
+  .dish-photo--card {
+    border-radius: 0;
+  }
+
+  .dish-photo--thumbnail {
+    aspect-ratio: 1;
+  }
+
+  .dish-photo--pollo-con-papas :global(img) {
+    object-position: 50% 66%;
+  }
+
+  .dish-photo--tacos-de-asada :global(img) {
+    object-position: 50% 48%;
+    transform: scale(1.16);
+  }
+</style>

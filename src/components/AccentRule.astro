@@ -1,0 +1,20 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<hr class:list={['accent-rule', className]} aria-hidden="true" />
+
+<style>
+  .accent-rule {
+    width: 56px;
+    height: 5px;
+    margin: 12px 0 20px;
+    border: 0;
+    border-radius: 3px;
+    background: var(--red);
+  }
+</style>

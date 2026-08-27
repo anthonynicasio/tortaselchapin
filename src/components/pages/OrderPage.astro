@@ -1,0 +1,411 @@
+---
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { business, formatAddress, getLocation } from '../../data/business';
+import { localizedPath, t, type Locale } from '../../i18n/utils';
+import { isOrderingEnabled } from '../../lib/square';
+import Base from '../../layouts/Base.astro';
+import { breadcrumbSchema, webPageSchema } from './schema';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const orderingEnabled = isOrderingEnabled();
+const pickupLocation = getLocation('silver-spring');
+const graph = [
+  webPageSchema(
+    locale,
+    '/order',
+    t(locale, 'seo.order.title'),
+    t(locale, 'seo.order.description'),
+  ),
+  breadcrumbSchema(locale, [
+    { name: t(locale, 'breadcrumbs.order'), path: '/order' },
+  ]),
+];
+---
+
+<Base
+  locale={locale}
+  title={t(locale, 'seo.order.title')}
+  description={t(locale, 'seo.order.description')}
+  canonicalPath="/order"
+  jsonLdGraph={graph}
+  hideSticky={true}
+>
+  <main id="main-content">
+    <div class="container">
+      <Breadcrumbs
+        locale={locale}
+        items={[{ label: t(locale, 'breadcrumbs.order') }]}
+      />
+    </div>
+
+    {
+      orderingEnabled ? (
+        <section class="section order-page">
+          <div class="container">
+            <div class="section-heading">
+              <h1>{t(locale, 'order.heading')}</h1>
+              <p>{t(locale, 'order.intro')}</p>
+            </div>
+
+            <form method="POST" action="/api/checkout" data-checkout-form>
+              <input type="hidden" name="locale" value={locale} />
+              <input type="hidden" name="items" value="[]" data-checkout-items />
+
+              <div
+                class="cart-panel"
+                data-cart-root
+                data-locale={locale}
+                data-quantity-label={t(locale, 'order.quantity')}
+                data-increase-label={t(locale, 'order.increaseQuantity')}
+                data-decrease-label={t(locale, 'order.decreaseQuantity')}
+                data-remove-label={t(locale, 'order.remove')}
+              >
+                <h2>{t(locale, 'order.cart')}</h2>
+                <ul class="cart-list" data-cart-list aria-live="polite"></ul>
+                <div class="empty-cart" data-empty-cart>
+                  <h3>{t(locale, 'order.emptyHeading')}</h3>
+                  <p>{t(locale, 'order.emptyBody')}</p>
+                  <a class="button button--secondary" href={localizedPath(locale, '/menu')}>
+                    {t(locale, 'order.browseMenu')}
+                  </a>
+                </div>
+                <div class="subtotal-row">
+                  <span>{t(locale, 'order.subtotal')}</span>
+                  <output data-cart-subtotal>$0.00</output>
+                </div>
+              </div>
+
+              <aside class="pickup-panel">
+                <p class="eyebrow">{t(locale, 'order.pickupOnly')}</p>
+                <h2>{t(locale, 'order.pickupLocation')}</h2>
+                <address>{formatAddress(pickupLocation)}</address>
+
+                <label for="pickup-name">{t(locale, 'order.pickupName')}</label>
+                <input
+                  id="pickup-name"
+                  type="text"
+                  name="name"
+                  required
+                  minlength="1"
+                  maxlength="60"
+                  autocomplete="name"
+                  placeholder={t(locale, 'order.pickupNamePlaceholder')}
+                />
+
+                <button class="button checkout-button" type="submit" data-checkout-button disabled>
+                  {t(locale, 'order.checkout')}
+                </button>
+                <p class="secure-note">{t(locale, 'order.secureCheckout')}</p>
+              </aside>
+            </form>
+          </div>
+        </section>
+      ) : (
+        <section class="section call-page">
+          <div class="container call-card">
+            <p class="eyebrow">{business.name}</p>
+            <h1>{t(locale, 'order.disabledHeading')}</h1>
+            <p>{t(locale, 'order.disabledBody')}</p>
+            <a class="button" href={business.phoneHref}>
+              {t(locale, 'buttons.callToOrder')} {business.phoneDisplay}
+            </a>
+          </div>
+        </section>
+      )
+    }
+  </main>
+
+<script>
+  import { cart, removeItem, setQty } from '../../lib/cart';
+
+  const root = document.querySelector<HTMLElement>('[data-cart-root]');
+  const form = document.querySelector<HTMLFormElement>('[data-checkout-form]');
+  const list = root?.querySelector<HTMLUListElement>('[data-cart-list]');
+  const empty = root?.querySelector<HTMLElement>('[data-empty-cart]');
+  const subtotal = root?.querySelector<HTMLOutputElement>('[data-cart-subtotal]');
+  const itemsInput = form?.querySelector<HTMLInputElement>('[data-checkout-items]');
+  const checkoutButton = form?.querySelector<HTMLButtonElement>('[data-checkout-button]');
+
+  if (root && form && list && empty && subtotal && itemsInput && checkoutButton) {
+    const formatter = new Intl.NumberFormat(
+      root.dataset.locale === 'es' ? 'es-US' : 'en-US',
+      { style: 'currency', currency: 'USD' },
+    );
+
+    const render = () => {
+      const items = cart.get();
+      list.replaceChildren();
+
+      for (const item of items) {
+        const row = document.createElement('li');
+        row.className = 'cart-row';
+
+        const copy = document.createElement('div');
+        copy.className = 'cart-row__copy';
+        const name = document.createElement('strong');
+        name.textContent = item.name;
+        const linePrice = document.createElement('span');
+        linePrice.textContent = formatter.format((item.priceCents * item.qty) / 100);
+        copy.append(name, linePrice);
+
+        const controls = document.createElement('div');
+        controls.className = 'quantity-controls';
+        controls.setAttribute('aria-label', root.dataset.quantityLabel ?? '');
+
+        const decrease = document.createElement('button');
+        decrease.type = 'button';
+        decrease.textContent = '-';
+        decrease.setAttribute(
+          'aria-label',
+          `${root.dataset.decreaseLabel ?? ''}: ${item.name}`,
+        );
+        decrease.addEventListener('click', () => setQty(item.variationId, item.qty - 1));
+
+        const quantity = document.createElement('span');
+        quantity.textContent = String(item.qty);
+        quantity.setAttribute('aria-live', 'polite');
+
+        const increase = document.createElement('button');
+        increase.type = 'button';
+        increase.textContent = '+';
+        increase.setAttribute(
+          'aria-label',
+          `${root.dataset.increaseLabel ?? ''}: ${item.name}`,
+        );
+        increase.addEventListener('click', () => setQty(item.variationId, item.qty + 1));
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'remove-button';
+        remove.textContent = root.dataset.removeLabel ?? '';
+        remove.addEventListener('click', () => removeItem(item.variationId));
+
+        controls.append(decrease, quantity, increase, remove);
+        row.append(copy, controls);
+        list.append(row);
+      }
+
+      const subtotalCents = items.reduce(
+        (sum, item) => sum + item.priceCents * item.qty,
+        0,
+      );
+      // Client prices are for display only. Square prices the catalog IDs at checkout.
+      subtotal.textContent = formatter.format(subtotalCents / 100);
+      empty.hidden = items.length > 0;
+      checkoutButton.disabled = items.length === 0;
+      itemsInput.value = JSON.stringify(
+        items.map((item) => ({ variationId: item.variationId, qty: item.qty })),
+      );
+    };
+
+    cart.subscribe(render);
+
+    form.addEventListener('submit', (event) => {
+      const items = cart.get();
+      if (items.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      itemsInput.value = JSON.stringify(
+        items.map((item) => ({ variationId: item.variationId, qty: item.qty })),
+      );
+    });
+  }
+</script>
+</Base>
+
+<style>
+  .order-page {
+    padding-top: clamp(2rem, 5vw, 4rem);
+  }
+
+  .order-page h1 {
+    font-size: clamp(2.8rem, 9vw, 5rem);
+  }
+
+  form {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .cart-panel,
+  .pickup-panel,
+  .call-card {
+    padding: clamp(1.4rem, 4vw, 2.4rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    box-shadow: var(--shadow);
+  }
+
+  .cart-panel h2,
+  .pickup-panel h2 {
+    margin-bottom: 1.2rem;
+    font-size: 1.8rem;
+  }
+
+  .cart-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .empty-cart {
+    padding-block: 1rem 1.5rem;
+  }
+
+  .empty-cart[hidden] {
+    display: none;
+  }
+
+  .empty-cart h3 {
+    margin-bottom: 0.35rem;
+    font-size: 1.25rem;
+    text-transform: none;
+  }
+
+  .empty-cart p {
+    color: var(--color-muted);
+  }
+
+  .subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 2px solid var(--color-ink);
+    font-weight: 700;
+  }
+
+  .pickup-panel {
+    align-self: start;
+  }
+
+  .pickup-panel address {
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    color: var(--color-ink);
+    background: var(--color-white);
+  }
+
+  .checkout-button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .checkout-button:disabled {
+    border-color: var(--color-muted);
+    background: var(--color-muted);
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .secure-note {
+    margin: 0.65rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.76rem;
+    text-align: center;
+  }
+
+  .call-page {
+    min-height: 56vh;
+    display: grid;
+    align-items: center;
+  }
+
+  .call-card {
+    max-width: 760px;
+  }
+
+  .call-card h1 {
+    margin-bottom: 0.8rem;
+  }
+
+  .call-card p:not(.eyebrow) {
+    color: var(--color-muted);
+  }
+
+  :global(.cart-row) {
+    display: grid;
+    gap: 0.85rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  :global(.cart-row__copy) {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  :global(.cart-row__copy span) {
+    color: var(--color-red-dark);
+    font-weight: 700;
+  }
+
+  :global(.quantity-controls) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  :global(.quantity-controls button) {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.4rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    color: var(--color-ink);
+    background: var(--color-white);
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  :global(.quantity-controls span) {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  :global(.quantity-controls .remove-button) {
+    width: auto;
+    padding-inline: 0.75rem;
+    margin-left: auto;
+    color: var(--color-red-dark);
+  }
+
+  @media (min-width: 850px) {
+    form {
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      align-items: start;
+    }
+
+    :global(.cart-row) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+  }
+</style>

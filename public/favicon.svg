@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="TEC">
+  <rect width="64" height="64" rx="8" fill="#c8102e"/>
+  <circle cx="32" cy="32" r="24" fill="#1b1b1b"/>
+  <text x="32" y="38" fill="#ffffff" font-family="Arial Narrow, Arial, sans-serif" font-size="19" font-weight="700" text-anchor="middle">TEC</text>
+</svg>

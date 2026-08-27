@@ -1,0 +1,325 @@
+{
+  "site": {
+    "name": "Tortas El Chapín",
+    "language": "English"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "mainNavigation": "Main navigation",
+    "footerNavigation": "Footer navigation",
+    "quickActions": "Quick actions",
+    "languageSwitcher": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "externalLink": "Opens in a new window",
+    "menuSections": "Menu sections",
+    "quantityControls": "Quantity controls",
+    "cartCount": "Cart item count",
+    "locationMap": "Location map",
+    "breadcrumbs": "Breadcrumbs"
+  },
+  "header": {
+    "home": "Home",
+    "menu": "Menu",
+    "locations": "Locations",
+    "about": "About",
+    "contact": "Contact",
+    "orderNow": "Order Now",
+    "callToOrder": "Call to Order",
+    "english": "English",
+    "spanish": "Español"
+  },
+  "footer": {
+    "tagline": "Made fresh when you order.",
+    "navigation": "Navigation",
+    "locations": "Locations",
+    "hours": "Hours",
+    "contact": "Contact",
+    "follow": "Follow",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "facebookPending": "Facebook link pending",
+    "copyright": "All rights reserved."
+  },
+  "stickyBar": {
+    "call": "Call",
+    "directions": "Directions",
+    "order": "Order",
+    "cart": "Cart",
+    "item": "item",
+    "items": "items"
+  },
+  "infoBar": {
+    "today": "Today",
+    "weekdayValue": "Open until 10:30 PM",
+    "fridayValue": "Open until 11:00 PM",
+    "weekendValue": "Open until 11:00 PM"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Authentic flavor. Made fresh.",
+      "headlineLead": "Bold tortas. Big flavor.",
+      "headlineAccent": "Made fresh.",
+      "subhead": "Tortas, shukos, tacos, and pollo con papas, made when you order. Find us in Silver Spring and Hyattsville, MD.",
+      "orderNow": "Order Now",
+      "callToOrder": "Call to Order",
+      "seeMenu": "See the Menu",
+      "photoAlt": "Tortas El Chapín food truck logo"
+    },
+    "featured": {
+      "eyebrow": "Menu",
+      "heading": "Start with these four.",
+      "intro": "A quick taste of what's on the menu.",
+      "seeFullMenu": "Explore the menu"
+    },
+    "why": {
+      "heading": "One bite and you'll be back.",
+      "bodyLead": "Big portions. Toasted bread. Made when you order.",
+      "bodyEmphasis": "Come hungry.",
+      "badgeMadeToOrder": "Made to order",
+      "badgeBigPortions": "Big portions",
+      "badgeOpenLate": "Open late",
+      "shukoAlt": "Shuko Clásico",
+      "tortaAlt": "Torta Mixta"
+    },
+    "locations": {
+      "heading": "Two Maryland locations.",
+      "body": "Find us in Silver Spring or Hyattsville.",
+      "viewAll": "View both locations"
+    }
+  },
+  "menu": {
+    "title": "Menu",
+    "heading": "Menu",
+    "intro": "Made fresh when you order. Big portions, bold flavor, no shortcuts.",
+    "sectionNavigation": "Menu sections",
+    "mostPopular": "Customer Favorite",
+    "pricePending": "Price pending",
+    "photoComingSoon": "Photo coming soon",
+    "unavailable": "Unavailable",
+    "add": "Add",
+    "added": "Added",
+    "addToCart": "Add to cart",
+    "viewCart": "View cart",
+    "orderingUnavailable": "Call us to order.",
+    "emptySection": "Nothing is listed here yet.",
+    "categories": {
+      "tortas": "Tortas",
+      "shukos": "Shukos",
+      "tacos": "Tacos",
+      "pollo-con-papas": "Pollo con Papas",
+      "bebidas": "Drinks"
+    }
+  },
+  "order": {
+    "title": "Order",
+    "heading": "Your order",
+    "intro": "Pick up your order at our Silver Spring location.",
+    "pickupLocation": "Pickup location",
+    "pickupName": "Name for pickup",
+    "pickupNamePlaceholder": "Name for pickup",
+    "cart": "Cart",
+    "quantity": "Quantity",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "emptyHeading": "Your cart is empty.",
+    "emptyBody": "Choose something from the menu to get started.",
+    "browseMenu": "Browse the Menu",
+    "disabledHeading": "Call us to order.",
+    "disabledBody": "Online ordering is not available right now.",
+    "pickupOnly": "Pickup only",
+    "secureCheckout": "You'll finish checkout securely on Square.",
+    "pricePending": "Price pending"
+  },
+  "thanks": {
+    "title": "Order received",
+    "heading": "Thanks, {name}.",
+    "headingFallback": "Thank you.",
+    "body": "Pick up your order at 701 University Blvd E, Silver Spring, MD 20903.",
+    "hoursHeading": "Pickup hours",
+    "call": "Call the restaurant",
+    "home": "Back to Home"
+  },
+  "error": {
+    "title": "Checkout issue",
+    "heading": "We couldn't start your checkout.",
+    "body": "Try again, or give us a call.",
+    "tryAgain": "Try again",
+    "call": "Call to order",
+    "validation": "Check your order and try again.",
+    "orderingDisabled": "Online ordering is not available right now."
+  },
+  "locations": {
+    "title": "Locations",
+    "heading": "Our locations",
+    "intro": "Find us in Silver Spring or Hyattsville.",
+    "address": "Address",
+    "phone": "Phone",
+    "hours": "Hours",
+    "directions": "Directions",
+    "viewLocation": "View location",
+    "orderingLocation": "Order online for pickup",
+    "callAhead": "Call to order"
+  },
+  "locationPages": {
+    "silverSpring": {
+      "title": "Silver Spring",
+      "heading": "Tortas El Chapín in Silver Spring",
+      "intro": "Stop by on University Blvd E in Silver Spring. Order online and pick up here.",
+      "parkingNote": "[PLACEHOLDER: Add verified Silver Spring parking details.]",
+      "nearbyLandmark": "[PLACEHOLDER: Add a verified nearby landmark.]",
+      "orderHere": "Order pickup",
+      "mapFallback": "Open Silver Spring directions"
+    },
+    "hyattsville": {
+      "title": "Hyattsville",
+      "heading": "Tortas El Chapín in Hyattsville",
+      "intro": "Stop by on Merrimac Dr in Hyattsville. Call ahead for large orders.",
+      "parkingNote": "[PLACEHOLDER: Add verified Hyattsville parking details.]",
+      "addressVerification": "[VERIFY: Confirm 1410 Merrimac Dr. Owner posts also show 1409.]",
+      "call": "Call the Hyattsville location",
+      "mapFallback": "Open Hyattsville directions"
+    }
+  },
+  "faq": {
+    "heading": "Questions",
+    "silverSpring": {
+      "parkingQuestion": "Do you have parking?",
+      "parkingAnswer": "Call (240) 423-7602 for the latest parking information.",
+      "orderAheadQuestion": "Can I order ahead?",
+      "orderAheadAnswer": "Yes. Place your order online and pick it up in Silver Spring.",
+      "deliveryQuestion": "Do you deliver?",
+      "deliveryAnswer": "Delivery is not available through this website."
+    },
+    "hyattsville": {
+      "parkingQuestion": "Do you have parking?",
+      "parkingAnswer": "Call (240) 423-7602 for the latest parking information.",
+      "orderAheadQuestion": "Can I order ahead?",
+      "orderAheadAnswer": "Call (240) 423-7602 to place your order ahead of time.",
+      "deliveryQuestion": "Do you deliver?",
+      "deliveryAnswer": "Delivery is not available through this website."
+    }
+  },
+  "about": {
+    "title": "About",
+    "heading": "Made fresh. Every time.",
+    "body": "Tortas El Chapín is a family-run business with two Maryland locations. We make tortas, shukos, tacos, and pollo con papas the way we'd want them served: big, hot, and fresh. Nothing waits under a heat lamp. You order, we cook. One bite and you'll be back.",
+    "photoAlt": "Tortas El Chapín food truck logo for Silver Spring and Hyattsville",
+    "photoComingSoon": "Photo coming soon",
+    "seeLocations": "Find a location"
+  },
+  "contact": {
+    "title": "Contact",
+    "heading": "Get in touch",
+    "intro": "Give us a call or stop by either location.",
+    "phone": "Phone",
+    "addresses": "Addresses",
+    "hours": "Hours",
+    "social": "Social",
+    "catering": "Planning a large order or catering? Give us a call.",
+    "facebookPending": "Facebook URL pending"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "menu": "Menu",
+    "order": "Order",
+    "locations": "Locations",
+    "silverSpring": "Silver Spring",
+    "hyattsville": "Hyattsville",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "heading": "We couldn't find that page.",
+    "body": "Head back home or take a look at the menu.",
+    "home": "Back to Home",
+    "menu": "Browse the Menu"
+  },
+  "hours": {
+    "heading": "Hours",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "mondayToThursday": "Monday to Thursday",
+    "saturdayAndSunday": "Saturday and Sunday",
+    "mondayToThursdayValue": "5:00 PM to 10:30 PM",
+    "fridayValue": "5:00 PM to 11:00 PM",
+    "weekendValue": "12:00 PM to 11:00 PM",
+    "today": "Today's hours",
+    "open": "Open",
+    "closed": "Closed",
+    "confirm": "Hours can change. Please check before you visit."
+  },
+  "buttons": {
+    "call": "Call",
+    "callToOrder": "Call to Order",
+    "directions": "Get Directions",
+    "orderNow": "Order Now",
+    "seeMenu": "View the Menu",
+    "viewDetails": "View details",
+    "goBack": "Go back",
+    "home": "Home",
+    "close": "Close",
+    "continue": "Continue"
+  },
+  "placeholders": {
+    "pricePending": "Price pending",
+    "photoComingSoon": "Photo coming soon",
+    "linkPending": "Link pending",
+    "detailsPending": "Details pending"
+  },
+  "seo": {
+    "home": {
+      "title": "Tortas El Chapín | Tortas, Shukos, Tacos & Pollo con Papas in Silver Spring, MD",
+      "description": "Fresh tortas, shukos, tacos, and pollo con papas made when you order in Silver Spring and Hyattsville, Maryland."
+    },
+    "menu": {
+      "title": "Menu | Tortas El Chapín, Silver Spring & Hyattsville, MD",
+      "description": "Browse the Tortas El Chapín menu for fresh tortas, shukos, tacos, and pollo con papas."
+    },
+    "order": {
+      "title": "Order Pickup | Tortas El Chapín Silver Spring",
+      "description": "Order pickup from Tortas El Chapín at 701 University Blvd E in Silver Spring."
+    },
+    "thanks": {
+      "title": "Order Received | Tortas El Chapín",
+      "description": "Pickup details for a Tortas El Chapín order."
+    },
+    "error": {
+      "title": "Order Problem | Tortas El Chapín",
+      "description": "Try checkout again or call Tortas El Chapín."
+    },
+    "locations": {
+      "title": "Locations | Tortas El Chapín in Maryland",
+      "description": "Find Tortas El Chapín in Silver Spring and Hyattsville, Maryland."
+    },
+    "silverSpring": {
+      "title": "Tortas El Chapín Silver Spring | 701 University Blvd E | Hours & Directions",
+      "description": "Hours, directions, and pickup details for Tortas El Chapín in Silver Spring, Maryland."
+    },
+    "hyattsville": {
+      "title": "Tortas El Chapín Hyattsville | 1410 Merrimac Dr | Hours & Directions",
+      "description": "Hours, directions, and phone details for Tortas El Chapín in Hyattsville, Maryland."
+    },
+    "about": {
+      "title": "About | Tortas El Chapín",
+      "description": "Meet the family behind Tortas El Chapín and our two Maryland locations."
+    },
+    "contact": {
+      "title": "Contact | Tortas El Chapín",
+      "description": "Call Tortas El Chapín or find both Maryland addresses and hours."
+    },
+    "notFound": {
+      "title": "Page Not Found | Tortas El Chapín",
+      "description": "Find the Tortas El Chapín home page or menu."
+    }
+  }
+}
